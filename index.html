@@ -1,4 +1,3 @@
-```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -223,6 +222,19 @@
     }
 
     /* PACKAGES */
+    #packages {
+      background: #111;
+      color: white;
+    }
+
+    #packages .section-title span {
+      color: #d6b8c8;
+    }
+
+    #packages .section-title h2 {
+      color: white;
+    }
+
     .package-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
@@ -230,10 +242,17 @@
     }
 
     .package {
-      background: white;
-      border: 1px solid #ddd;
+      background: #f3dbe7;
+      color: #222;
+      border: 1px solid #e5b8cd;
       border-radius: 18px;
       padding: 35px;
+      transition: transform 0.25s, box-shadow 0.25s;
+    }
+
+    .package:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 30px rgba(243, 219, 231, 0.15);
     }
 
     .package h3 {
@@ -242,7 +261,7 @@
     }
 
     .package p {
-      color: #666;
+      color: #555;
       margin-bottom: 20px;
     }
 
@@ -263,7 +282,7 @@
       margin: 45px auto 0;
       text-align: center;
       font-size: 14px;
-      color: #777;
+      color: #bbb;
     }
 
     /* FEATURED */
@@ -319,6 +338,28 @@
     .support-box li {
       margin: 8px 0;
       color: #ddd;
+    }
+
+    /* HUMAN CUSTOMER SUPPORT */
+    .human-support-text {
+      max-width: 900px;
+      margin: 50px auto 35px;
+      text-align: center;
+    }
+
+    .human-support-text h3 {
+      font-size: 30px;
+      margin-bottom: 22px;
+    }
+
+    .human-support-text p {
+      color: #ccc;
+      font-size: 18px;
+      margin-bottom: 18px;
+    }
+
+    .human-support-text .button {
+      margin-top: 12px;
     }
 
     /* DEMOS */
@@ -500,6 +541,18 @@
 
       .featured-box h3 {
         font-size: 28px;
+      }
+
+      .human-support-text {
+        margin-top: 45px;
+      }
+
+      .human-support-text h3 {
+        font-size: 27px;
+      }
+
+      .human-support-text p {
+        font-size: 16px;
       }
     }
   </style>
@@ -809,7 +862,7 @@
     <div class="container">
 
       <div class="section-title">
-        <span>Flagship solution</span>
+        <span>Our flagship solution</span>
         <h2>AI + HUMAN SUPPORT</h2>
       </div>
 
@@ -818,9 +871,8 @@
         <h3>The best of both worlds.</h3>
 
         <p>
-          Η τεχνητή νοημοσύνη αναλαμβάνει τα απλά και επαναλαμβανόμενα,
-          ενώ ο άνθρωπος αναλαμβάνει όσα χρειάζονται κρίση,
-          κατανόηση και προσωπική επικοινωνία.
+          Η τεχνολογία αναλαμβάνει τα απλά. Ο άνθρωπος αναλαμβάνει
+          όσα χρειάζονται κρίση, κατανόηση και προσωπική επικοινωνία.
         </p>
 
         <div class="support-columns">
@@ -845,7 +897,7 @@
             <h4>Human handles</h4>
 
             <ul>
-              <li>Σύνθετα θέματα</li>
+              <li>Πιο σύνθετα θέματα</li>
               <li>Παράπονα</li>
               <li>Περιπτώσεις που χρειάζονται κρίση</li>
               <li>Προσωπική επικοινωνία</li>
@@ -857,36 +909,35 @@
 
       </div>
 
-    </div>
-      <div style="max-width: 900px; margin: 50px auto 35px; text-align: center;">
 
-        <h3 style="font-size: 30px; margin-bottom: 22px;">
-          Human Customer Support
-        </h3>
+      <!-- HUMAN CUSTOMER SUPPORT -->
+      <div class="human-support-text">
 
-        <p style="color: #ccc; font-size: 18px; margin-bottom: 18px;">
+        <h3>Human Customer Support</h3>
+
+        <p>
           Παράλληλα με τις AI λύσεις μας, προσφέρουμε Human Customer Support
           για επιχειρήσεις που θέλουν να συνδυάσουν την τεχνολογία με την
           ανθρώπινη επικοινωνία.
         </p>
 
-        <p style="color: #ccc; font-size: 18px; margin-bottom: 18px;">
+        <p>
           Αναλαμβάνουμε την εξυπηρέτηση πελατών, τη διαχείριση εισερχόμενων
           αιτημάτων και την καθημερινή επικοινωνία με το κοινό σας.
         </p>
 
-        <p style="color: #ccc; font-size: 18px; margin-bottom: 18px;">
+        <p>
           Με την υπηρεσία μας, οι επιχειρήσεις μπορούν να έχουν σταθερή
           ανθρώπινη υποστήριξη χωρίς το κόστος μιας πλήρους πρόσληψης
           και διατήρησης επιπλέον προσωπικού.
         </p>
 
-        <p style="color: #ccc; font-size: 18px; margin-bottom: 18px;">
+        <p>
           Έτσι μειώνουν λειτουργικά και μισθολογικά έξοδα, ενώ παράλληλα
           διατηρούν υψηλό επίπεδο εξυπηρέτησης.
         </p>
 
-        <p style="color: #ccc; font-size: 18px; margin-bottom: 30px;">
+        <p>
           Περισσότερη υποστήριξη, μικρότερο κόστος, χωρίς την ανάγκη
           δημιουργίας ενός επιπλέον in-house τμήματος.
         </p>
@@ -896,6 +947,9 @@
         </a>
 
       </div>
+
+    </div>
+
   </section>
 
 
@@ -1040,4 +1094,3 @@
 
 </body>
 </html>
-```
