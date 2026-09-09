@@ -1,18 +1,22 @@
+```html
 <!DOCTYPE html>
-<html lang="el">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <title>ELåiVA — T&S COMPANY | AI Solutions</title>
 
-  <meta name="description" content="ELåiVA — T&S COMPANY. AI solutions and Human Customer Support designed to make business smarter.">
+  <meta
+    name="description"
+    content="ELåiVA — T&S COMPANY. AI solutions, automation and human customer support designed to make business smarter."
+  >
 
   <style>
     * {
+      box-sizing: border-box;
       margin: 0;
       padding: 0;
-      box-sizing: border-box;
     }
 
     html {
@@ -20,470 +24,437 @@
     }
 
     body {
-      font-family: Georgia, "Times New Roman", serif;
-      background: #f8f4ef;
-      color: #2d2926;
+      font-family: Arial, Helvetica, sans-serif;
+      background: #f8f7f4;
+      color: #222;
       line-height: 1.6;
+      overflow-x: hidden;
     }
 
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    /* HEADER */
     header {
-      position: fixed;
+      position: sticky;
       top: 0;
-      left: 0;
-      width: 100%;
       z-index: 1000;
-      background: rgba(248, 244, 239, 0.94);
-      backdrop-filter: blur(12px);
-      border-bottom: 1px solid rgba(45, 41, 38, 0.08);
+      background: rgba(248, 247, 244, 0.97);
+      border-bottom: 1px solid #ddd;
+      backdrop-filter: blur(10px);
     }
 
-    .nav {
+    .header-inner {
       max-width: 1200px;
       margin: auto;
-      padding: 20px 30px;
+      padding: 18px 30px;
       display: flex;
       align-items: center;
       justify-content: space-between;
+      gap: 25px;
     }
 
     .logo {
-      font-size: 22px;
+      font-size: 20px;
       font-weight: bold;
-      letter-spacing: 1px;
-      color: #25211f;
+      white-space: nowrap;
     }
 
-    .nav-links {
+    nav {
       display: flex;
-      gap: 28px;
-      list-style: none;
+      gap: 25px;
+      align-items: center;
     }
 
-    .nav-links a {
-      text-decoration: none;
-      color: #403a36;
+    nav a {
       font-size: 14px;
-      transition: 0.3s;
+      transition: opacity 0.2s;
     }
 
-    .nav-links a:hover {
-      color: #9b7662;
+    nav a:hover {
+      opacity: 0.55;
     }
 
-    .nav-button {
-      text-decoration: none;
-      background: #2d2926;
-      color: white !important;
-      padding: 11px 18px;
-      border-radius: 30px;
+    .menu-button {
+      display: none;
+      background: none;
+      border: none;
+      font-size: 28px;
+      cursor: pointer;
     }
 
+    /* HERO */
     .hero {
-      min-height: 100vh;
+      min-height: 90vh;
       display: flex;
       align-items: center;
       justify-content: center;
       text-align: center;
-      padding: 140px 25px 90px;
-      background:
-        radial-gradient(circle at top left, #eadfd5 0%, transparent 35%),
-        radial-gradient(circle at bottom right, #e8d7cd 0%, transparent 35%),
-        #f8f4ef;
+      padding: 80px 25px;
+      background: linear-gradient(135deg, #f8f7f4, #ebe8e2);
     }
 
     .hero-content {
       max-width: 900px;
     }
 
-    .eyebrow {
+    .hero-small {
+      font-size: 14px;
+      letter-spacing: 3px;
       text-transform: uppercase;
-      letter-spacing: 4px;
-      font-size: 12px;
-      color: #9b7662;
-      margin-bottom: 22px;
+      margin-bottom: 20px;
     }
 
     .hero h1 {
-      font-size: clamp(48px, 8vw, 92px);
-      font-weight: 500;
-      line-height: 1;
-      margin-bottom: 28px;
+      font-size: clamp(42px, 7vw, 82px);
+      line-height: 1.05;
+      margin-bottom: 25px;
     }
 
-    .hero h1 span {
-      display: block;
-      font-size: clamp(22px, 3vw, 34px);
-      letter-spacing: 5px;
-      margin-top: 18px;
+    .hero-brand {
+      font-size: clamp(20px, 3vw, 32px);
+      margin-bottom: 20px;
     }
 
     .hero p {
-      max-width: 680px;
-      margin: 0 auto 35px;
+      max-width: 700px;
+      margin: 0 auto 30px;
       font-size: 18px;
-      color: #625b56;
+      color: #555;
     }
 
-    .hero-buttons {
+    .buttons {
       display: flex;
       justify-content: center;
       gap: 15px;
       flex-wrap: wrap;
     }
 
-    .btn {
+    .button {
       display: inline-block;
-      text-decoration: none;
-      padding: 15px 27px;
-      border-radius: 40px;
-      font-size: 14px;
-      transition: 0.3s;
+      padding: 14px 25px;
+      border: 1px solid #222;
+      border-radius: 30px;
+      transition: all 0.25s;
     }
 
-    .btn-primary {
-      background: #2d2926;
+    .button:hover {
+      background: #222;
       color: white;
     }
 
-    .btn-primary:hover {
-      transform: translateY(-2px);
-      background: #49413c;
+    .button-dark {
+      background: #222;
+      color: white;
     }
 
-    .btn-secondary {
-      border: 1px solid #8e7a6e;
-      color: #403a36;
-    }
-
-    .btn-secondary:hover {
-      background: #e9ddd5;
-    }
-
+    /* SECTIONS */
     section {
       padding: 100px 25px;
     }
 
     .container {
-      max-width: 1150px;
+      max-width: 1100px;
       margin: auto;
     }
 
-    .section-label {
-      text-transform: uppercase;
-      letter-spacing: 3px;
-      font-size: 11px;
-      color: #9b7662;
-      margin-bottom: 15px;
-    }
-
     .section-title {
-      font-size: clamp(34px, 5vw, 56px);
-      font-weight: 500;
-      margin-bottom: 20px;
-    }
-
-    .section-intro {
-      max-width: 720px;
-      color: #625b56;
-      font-size: 17px;
+      text-align: center;
       margin-bottom: 55px;
     }
 
-    .about {
-      background: #fffdfb;
+    .section-title span {
+      display: block;
+      font-size: 13px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+      color: #777;
     }
 
-    .about-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 70px;
-      align-items: center;
+    .section-title h2 {
+      font-size: clamp(32px, 5vw, 50px);
     }
 
-    .about-text p {
-      margin-bottom: 18px;
-      color: #625b56;
-    }
-
-    .about-card {
-      background: #eee4dc;
-      padding: 55px 40px;
-      border-radius: 30px;
+    .about-text {
+      max-width: 850px;
+      margin: auto;
       text-align: center;
+      font-size: 18px;
+      color: #555;
     }
 
-    .about-card h3 {
-      font-size: 30px;
-      font-weight: 500;
-      margin-bottom: 15px;
-    }
-
-    .about-card p {
-      color: #625b56;
-    }
-
-    .services-grid {
+    /* SERVICES */
+    .cards {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
       gap: 25px;
     }
 
-    .service-card {
-      background: #fffdfb;
-      border: 1px solid #e6ddd6;
-      border-radius: 24px;
+    .card {
+      background: white;
+      border: 1px solid #ddd;
       padding: 35px;
-      transition: 0.3s;
+      border-radius: 18px;
     }
 
-    .service-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 15px 35px rgba(45, 41, 38, 0.08);
-    }
-
-    .service-number {
-      font-size: 12px;
-      color: #9b7662;
-      letter-spacing: 2px;
-    }
-
-    .service-card h3 {
-      font-size: 28px;
-      font-weight: 500;
-      margin: 15px 0;
-    }
-
-    .service-card p {
-      color: #625b56;
+    .card h3 {
+      font-size: 25px;
       margin-bottom: 18px;
     }
 
-    .service-card ul {
-      padding-left: 20px;
-      color: #625b56;
+    .card p {
+      color: #666;
+      margin-bottom: 20px;
     }
 
-    .service-card li {
-      margin-bottom: 7px;
+    .card ul {
+      list-style: none;
     }
 
-    .packages {
-      background: #292522;
-      color: #f8f4ef;
+    .card li {
+      margin: 10px 0;
     }
 
-    .packages .section-label {
-      color: #d3ad96;
+    .card li::before {
+      content: "✓ ";
     }
 
-    .packages .section-intro {
-      color: #cfc5bf;
-    }
-
+    /* PACKAGES */
     .package-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
       gap: 25px;
     }
 
-    .package-card {
-      background: #37312e;
-      border: 1px solid #4a423d;
-      border-radius: 24px;
+    .package {
+      background: white;
+      border: 1px solid #ddd;
+      border-radius: 18px;
       padding: 35px;
     }
 
-    .package-card.featured {
-      border: 1px solid #c8a48e;
-      background: #403833;
+    .package h3 {
+      font-size: 24px;
+      margin-bottom: 15px;
     }
 
-    .package-card h3 {
-      font-size: 27px;
-      font-weight: 500;
-      margin-bottom: 10px;
+    .package p {
+      color: #666;
+      margin-bottom: 20px;
     }
 
-    .package-card .price {
-      font-size: 18px;
-      color: #d7b8a4;
-      margin: 20px 0;
+    .package ul {
+      list-style: none;
     }
 
-    .package-card ul {
-      padding-left: 20px;
-      color: #d8cfca;
+    .package li {
+      margin: 9px 0;
     }
 
-    .package-card li {
-      margin-bottom: 8px;
+    .package li::before {
+      content: "✓ ";
     }
 
-    .flagship {
+    .note {
+      max-width: 850px;
+      margin: 45px auto 0;
       text-align: center;
-      background: #eee4dc;
+      font-size: 14px;
+      color: #777;
     }
 
-    .flagship-content {
+    /* FEATURED */
+    .featured {
+      background: #222;
+      color: white;
+    }
+
+    .featured .section-title span {
+      color: #bbb;
+    }
+
+    .featured-box {
+      max-width: 900px;
+      margin: auto;
+      text-align: center;
+    }
+
+    .featured-box h3 {
+      font-size: 35px;
+      margin-bottom: 20px;
+    }
+
+    .featured-box p {
+      color: #ccc;
+      font-size: 18px;
+      margin-bottom: 30px;
+    }
+
+    .support-columns {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 25px;
+      margin-top: 40px;
+    }
+
+    .support-box {
+      border: 1px solid #555;
+      padding: 30px;
+      border-radius: 18px;
+      text-align: left;
+    }
+
+    .support-box h4 {
+      margin-bottom: 15px;
+      font-size: 21px;
+    }
+
+    .support-box ul {
+      list-style: none;
+    }
+
+    .support-box li {
+      margin: 8px 0;
+      color: #ddd;
+    }
+
+    /* DEMOS */
+    .demo {
+      background: white;
+      border: 1px solid #ddd;
+      border-radius: 20px;
+      padding: 40px;
+      text-align: center;
+      max-width: 850px;
+      margin: auto;
+    }
+
+    .demo h3 {
+      font-size: 30px;
+      margin-bottom: 15px;
+    }
+
+    .demo p {
+      color: #666;
+      margin-bottom: 25px;
+    }
+
+    /* CONTACT */
+    .contact {
+      text-align: center;
+      background: #ebe8e2;
+    }
+
+    .contact-content {
       max-width: 800px;
       margin: auto;
     }
 
-    .flagship h2 {
-      font-size: clamp(36px, 5vw, 58px);
-      font-weight: 500;
+    .contact-content h2 {
+      font-size: clamp(35px, 5vw, 55px);
       margin-bottom: 20px;
     }
 
-    .flagship p {
-      color: #625b56;
-      font-size: 17px;
-      margin-bottom: 35px;
-    }
-
-    .split-support {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 20px;
-      margin: 40px 0;
-      text-align: left;
-    }
-
-    .support-box {
-      background: #fffdfb;
-      padding: 30px;
-      border-radius: 20px;
-    }
-
-    .support-box h3 {
-      margin-bottom: 12px;
-      font-size: 22px;
-    }
-
-    .support-box ul {
-      padding-left: 20px;
-      color: #625b56;
-    }
-
-    .demos {
-      background: #fffdfb;
-    }
-
-    .demo-card {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 40px;
-      align-items: center;
-      background: #f3ece6;
-      border-radius: 30px;
-      padding: 45px;
-    }
-
-    .demo-card h3 {
-      font-size: 35px;
-      font-weight: 500;
-      margin-bottom: 15px;
-    }
-
-    .demo-card p {
-      color: #625b56;
-      margin-bottom: 25px;
-    }
-
-    .demo-preview {
-      min-height: 280px;
-      border-radius: 22px;
-      background: linear-gradient(135deg, #ead8ce, #f8f4ef);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-    }
-
-    .demo-preview span {
-      font-size: 30px;
-      color: #544942;
-    }
-
-    .contact {
-      background: #f8f4ef;
-      text-align: center;
-    }
-
-    .contact-content {
-      max-width: 700px;
-      margin: auto;
-    }
-
-    .contact p {
-      color: #625b56;
-      font-size: 17px;
+    .contact-content p {
+      color: #555;
       margin-bottom: 30px;
     }
 
-    .contact-details {
-      margin: 30px 0;
+    .contact-info {
+      margin-top: 30px;
       display: flex;
       flex-direction: column;
       gap: 10px;
-    }
-
-    .contact-details a {
-      color: #403a36;
-      text-decoration: none;
+      align-items: center;
       font-size: 17px;
-      transition: 0.3s;
     }
 
-    .contact-details a:hover {
-      color: #9b7662;
+    .contact-info a {
+      transition: opacity 0.2s;
     }
 
+    .contact-info a:hover {
+      opacity: 0.55;
+    }
+
+    /* FOOTER */
     footer {
-      background: #292522;
-      color: #d8cfca;
-      text-align: center;
-      padding: 35px 20px;
-      font-size: 13px;
-    }
-
-    footer strong {
+      background: #222;
       color: white;
+      text-align: center;
+      padding: 50px 25px;
     }
 
-    footer a {
-      color: inherit;
-      text-decoration: none;
+    footer .footer-logo {
+      font-size: 22px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    footer p {
+      color: #bbb;
+      margin: 8px 0;
+    }
+
+    footer .footer-contact {
+      margin: 20px 0;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
     }
 
     footer a:hover {
-      color: #d7b8a4;
+      opacity: 0.7;
     }
 
-    .footer-contact {
-      margin: 12px 0;
-      display: flex;
-      justify-content: center;
-      gap: 20px;
-      flex-wrap: wrap;
-    }
+    /* MOBILE */
+    @media (max-width: 768px) {
 
-    @media (max-width: 800px) {
-
-      .nav {
-        padding: 17px 20px;
-      }
-
-      .nav-links {
-        display: none;
+      .header-inner {
+        padding: 15px 20px;
       }
 
       .logo {
-        font-size: 18px;
+        font-size: 16px;
+        white-space: normal;
+        max-width: 80%;
+      }
+
+      .menu-button {
+        display: block;
+      }
+
+      nav {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: #f8f7f4;
+        border-bottom: 1px solid #ddd;
+        flex-direction: column;
+        padding: 20px;
+        gap: 18px;
+      }
+
+      nav.active {
+        display: flex;
+      }
+
+      nav a {
+        font-size: 16px;
       }
 
       .hero {
-        padding-top: 130px;
+        min-height: 80vh;
+        padding: 70px 20px;
+      }
+
+      .hero h1 {
+        font-size: 43px;
       }
 
       .hero p {
@@ -491,27 +462,44 @@
       }
 
       section {
-        padding: 75px 20px;
+        padding: 70px 20px;
       }
 
-      .about-grid,
-      .services-grid,
+      .cards,
       .package-grid,
-      .split-support,
-      .demo-card {
+      .support-columns {
         grid-template-columns: 1fr;
       }
 
-      .about-grid {
-        gap: 35px;
+      .card,
+      .package,
+      .demo {
+        padding: 25px;
       }
 
-      .demo-card {
-        padding: 30px;
+      .contact-info {
+        font-size: 16px;
       }
 
-      .demo-preview {
-        min-height: 220px;
+      .buttons {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .button {
+        text-align: center;
+      }
+
+      .section-title {
+        margin-bottom: 40px;
+      }
+
+      .section-title h2 {
+        font-size: 34px;
+      }
+
+      .featured-box h3 {
+        font-size: 28px;
       }
     }
   </style>
@@ -519,352 +507,327 @@
 
 <body>
 
+  <!-- HEADER -->
   <header>
-    <nav class="nav">
+    <div class="header-inner">
 
       <div class="logo">
         𝑬𝑳å𝒊𝑽𝑨 — 𝑻&𝑺 𝑪𝑶𝑴𝑷𝑨𝑵𝒀
       </div>
 
-      <ul class="nav-links">
-        <li><a href="#about">About</a></li>
-        <li><a href="#services">Services</a></li>
-        <li><a href="#packages">Packages</a></li>
-        <li><a href="#demos">Demos</a></li>
-        <li><a href="#contact" class="nav-button">Contact</a></li>
-      </ul>
+      <button
+        class="menu-button"
+        onclick="toggleMenu()"
+        aria-label="Open menu"
+      >
+        ☰
+      </button>
 
-    </nav>
+      <nav id="mainNav">
+        <a href="#about" onclick="closeMenu()">About</a>
+        <a href="#services" onclick="closeMenu()">Services</a>
+        <a href="#packages" onclick="closeMenu()">Packages</a>
+        <a href="#demos" onclick="closeMenu()">Demos</a>
+        <a href="#contact" onclick="closeMenu()">Contact</a>
+      </nav>
+
+    </div>
   </header>
 
-  <main>
 
-    <section class="hero">
+  <!-- HERO -->
+  <section class="hero">
 
-      <div class="hero-content">
+    <div class="hero-content">
 
-        <div class="eyebrow">
-          AI • Automation • Human Support
-        </div>
+      <div class="hero-small">
+        AI • Automation • Human Support
+      </div>
 
-        <h1>
-          Make your business smarter.
-          <span>ELåiVA — T&S COMPANY</span>
-        </h1>
+      <h1>
+        Make your business smarter.
+      </h1>
+
+      <div class="hero-brand">
+        𝑬𝑳å𝒊𝑽𝑨 — 𝑻&𝑺 𝑪𝑶𝑴𝑷𝑨𝑵𝒀
+      </div>
+
+      <p>
+        AI solutions designed to make business smarter.
+        We help businesses automate everyday processes,
+        save time and improve efficiency.
+      </p>
+
+      <div class="buttons">
+
+        <a href="#contact" class="button button-dark">
+          Book a consultation
+        </a>
+
+        <a href="#services" class="button">
+          Explore our services
+        </a>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- ABOUT -->
+  <section id="about">
+
+    <div class="container">
+
+      <div class="section-title">
+        <span>About ELåiVA</span>
+        <h2>Technology that works for your business.</h2>
+      </div>
+
+      <div class="about-text">
 
         <p>
-          AI solutions designed to make business smarter.
-          We help businesses automate everyday processes,
-          save time and operate more efficiently.
+          Η ELåiVA — T&S COMPANY είναι μια σύγχρονη εταιρεία τεχνολογίας
+          που αξιοποιεί τη δύναμη της Τεχνητής Νοημοσύνης (AI) για να
+          βοηθά επιχειρήσεις να εξελίσσονται και να λειτουργούν πιο έξυπνα.
         </p>
 
-        <div class="hero-buttons">
-
-          <a href="#contact" class="btn btn-primary">
-            Book a consultation
-          </a>
-
-          <a href="#services" class="btn btn-secondary">
-            Explore our services
-          </a>
-
-        </div>
-
-      </div>
-
-    </section>
-
-    <section class="about" id="about">
-
-      <div class="container">
-
-        <div class="about-grid">
-
-          <div class="about-text">
-
-            <div class="section-label">
-              About ELåiVA
-            </div>
-
-            <h2 class="section-title">
-              Technology that works for your business.
-            </h2>
-
-            <p>
-              Η ELåiVA — T&S COMPANY είναι μια σύγχρονη εταιρεία
-              τεχνολογίας που αξιοποιεί τη δύναμη της
-              Τεχνητής Νοημοσύνης για να βοηθά επιχειρήσεις
-              να εξελίσσονται και να λειτουργούν πιο έξυπνα.
-            </p>
-
-            <p>
-              Δημιουργούμε και εφαρμόζουμε λύσεις AI που
-              αυτοματοποιούν καθημερινές διαδικασίες,
-              εξοικονομούν χρόνο και βελτιώνουν την αποδοτικότητα.
-            </p>
-
-            <p>
-              Αναπτύσσουμε εργαλεία και αυτοματισμούς
-              προσαρμοσμένους στις ανάγκες κάθε επιχείρησης.
-            </p>
-
-            <p>
-              Στόχος μας είναι να κάνουμε την τεχνητή νοημοσύνη
-              απλή, πρακτική και πραγματικά χρήσιμη
-              για κάθε επαγγελματία.
-            </p>
-
-          </div>
-
-          <div class="about-card">
-
-            <h3>AI, made practical.</h3>
-
-            <p>
-              Όχι περίπλοκη τεχνολογία.
-              Πρακτικές λύσεις που βοηθούν
-              την επιχείρησή σας να λειτουργεί καλύτερα.
-            </p>
-
-          </div>
-
-        </div>
-
-      </div>
-
-    </section>
-
-    <section id="services">
-
-      <div class="container">
-
-        <div class="section-label">
-          What we do
-        </div>
-
-        <h2 class="section-title">
-          Our services
-        </h2>
-
-        <p class="section-intro">
-          Από την αυτοματοποίηση και την τεχνητή νοημοσύνη
-          μέχρι την ανθρώπινη εξυπηρέτηση πελατών,
-          δημιουργούμε λύσεις προσαρμοσμένες στην επιχείρησή σας.
-        </p>
-
-        <div class="services-grid">
-
-          <div class="service-card">
-
-            <div class="service-number">
-              01
-            </div>
-
-            <h3>
-              AI Solutions
-            </h3>
-
-            <p>
-              Έξυπνα εργαλεία και αυτοματισμοί
-              που μειώνουν τον χρόνο και την καθημερινή εργασία.
-            </p>
-
-            <ul>
-              <li>AI chatbots</li>
-              <li>AI email assistance</li>
-              <li>Automated workflows</li>
-              <li>Lead qualification</li>
-              <li>Business automations</li>
-            </ul>
-
-          </div>
-
-          <div class="service-card">
-
-            <div class="service-number">
-              02
-            </div>
-
-            <h3>
-              Human Customer Support
-            </h3>
-
-            <p>
-              Ανθρώπινη υποστήριξη για επιχειρήσεις
-              που θέλουν προσωπική και σταθερή επικοινωνία
-              με τους πελάτες τους.
-            </p>
-
-            <ul>
-              <li>Email support</li>
-              <li>Live chat</li>
-              <li>Customer service</li>
-              <li>Back office</li>
-              <li>Διαχείριση αιτημάτων</li>
-            </ul>
-
-          </div>
-
-        </div>
-
-      </div>
-
-    </section>
-
-    <section class="packages" id="packages">
-
-      <div class="container">
-
-        <div class="section-label">
-          Our packages
-        </div>
-
-        <h2 class="section-title">
-          Choose the right solution.
-        </h2>
-
-        <p class="section-intro">
-          Ενδεικτικά πακέτα που προσαρμόζονται
-          στις ανάγκες, το μέγεθος και τις απαιτήσεις
-          κάθε επιχείρησης.
-        </p>
-
-        <div class="package-grid">
-
-          <div class="package-card">
-
-            <h3>
-              AI STARTER
-            </h3>
-
-            <p>
-              Για μικρές επιχειρήσεις που θέλουν
-              να ξεκινήσουν με AI.
-            </p>
-
-            <div class="price">
-              €300–€400 setup<br>
-              + €90 / month
-            </div>
-
-            <ul>
-              <li>AI chatbot για website</li>
-              <li>FAQ / συχνές ερωτήσεις</li>
-              <li>Συλλογή στοιχείων πελατών</li>
-              <li>Βασικά AI automations</li>
-              <li>Μηνιαία παρακολούθηση & υποστήριξη</li>
-            </ul>
-
-          </div>
-
-          <div class="package-card">
-
-            <h3>
-              AI BUSINESS
-            </h3>
-
-            <p>
-              Για επιχειρήσεις με μεγαλύτερο
-              όγκο πελατών.
-            </p>
-
-            <div class="price">
-              €400–€600 setup<br>
-              + €150 / month
-            </div>
-
-            <ul>
-              <li>Όλα του Starter</li>
-              <li>Προηγμένο chatbot</li>
-              <li>AI email assistance</li>
-              <li>Αυτοματοποιημένα workflows</li>
-              <li>Lead qualification</li>
-              <li>Διασύνδεση με υπάρχοντα εργαλεία</li>
-              <li>Μηνιαίες βελτιστοποιήσεις</li>
-            </ul>
-
-          </div>
-
-          <div class="package-card">
-
-            <h3>
-              HUMAN SUPPORT — BASIC
-            </h3>
-
-            <p>
-              Ανθρώπινη υποστήριξη για καθημερινά
-              αιτήματα πελατών.
-            </p>
-
-            <div class="price">
-              €500–€700 / month
-            </div>
-
-            <ul>
-              <li>Email & live chat</li>
-              <li>Έως 3h / day</li>
-              <li>Έως 100–130 αιτήματα / month</li>
-              <li>Βασική διαχείριση πελατών</li>
-            </ul>
-
-          </div>
-
-          <div class="package-card">
-
-            <h3>
-              HUMAN SUPPORT — BUSINESS
-            </h3>
-
-            <p>
-              Μεγαλύτερη κάλυψη και
-              ολοκληρωμένη υποστήριξη.
-            </p>
-
-            <div class="price">
-              Από €850 / month
-            </div>
-
-            <ul>
-              <li>Έως 5h / day</li>
-              <li>Περισσότερα αιτήματα</li>
-              <li>Customer service</li>
-              <li>Back office</li>
-              <li>Μεγαλύτερη διαθεσιμότητα</li>
-            </ul>
-
-          </div>
-
-        </div>
-
-      </div>
-
-    </section>
-
-    <section class="flagship">
-
-      <div class="flagship-content">
-
-        <div class="section-label">
-          Our flagship solution
-        </div>
-
-        <h2>
-          AI + HUMAN SUPPORT
-        </h2>
+        <br>
 
         <p>
-          Η τεχνολογία αναλαμβάνει τα απλά.
-          Ο άνθρωπος αναλαμβάνει όσα χρειάζονται
-          κρίση, κατανόηση και προσωπική επικοινωνία.
+          Δημιουργούμε και εφαρμόζουμε λύσεις AI που αυτοματοποιούν
+          καθημερινές διαδικασίες, εξοικονομούν χρόνο και βελτιώνουν
+          την αποδοτικότητα.
         </p>
 
-        <div class="split-support">
+        <br>
+
+        <p>
+          Στόχος μας είναι να κάνουμε την τεχνητή νοημοσύνη απλή,
+          πρακτική και πραγματικά χρήσιμη για κάθε επαγγελματία.
+        </p>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- SERVICES -->
+  <section id="services">
+
+    <div class="container">
+
+      <div class="section-title">
+        <span>What we do</span>
+        <h2>Our Services</h2>
+      </div>
+
+      <div class="cards">
+
+        <div class="card">
+
+          <h3>AI Solutions</h3>
+
+          <p>
+            Έξυπνες λύσεις και αυτοματισμοί προσαρμοσμένοι
+            στις ανάγκες κάθε επιχείρησης.
+          </p>
+
+          <ul>
+            <li>AI chatbots</li>
+            <li>FAQ automation</li>
+            <li>AI email assistance</li>
+            <li>Lead qualification</li>
+            <li>Automated workflows</li>
+            <li>Business automations</li>
+          </ul>
+
+        </div>
+
+
+        <div class="card">
+
+          <h3>Human Customer Support</h3>
+
+          <p>
+            Ανθρώπινη υποστήριξη για επιχειρήσεις που θέλουν
+            σταθερή επικοινωνία με τους πελάτες τους.
+          </p>
+
+          <ul>
+            <li>Email support</li>
+            <li>Live chat</li>
+            <li>Customer service</li>
+            <li>Back office</li>
+            <li>Incoming requests</li>
+            <li>Daily customer communication</li>
+          </ul>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- PACKAGES -->
+  <section id="packages">
+
+    <div class="container">
+
+      <div class="section-title">
+        <span>Solutions</span>
+        <h2>Our Packages</h2>
+      </div>
+
+
+      <div class="package-grid">
+
+        <!-- AI STARTER -->
+        <div class="package">
+
+          <h3>AI STARTER</h3>
+
+          <p>
+            Για μικρές επιχειρήσεις που θέλουν να ξεκινήσουν με AI.
+          </p>
+
+          <ul>
+            <li>AI chatbot για website</li>
+            <li>FAQ / απαντήσεις σε συχνές ερωτήσεις</li>
+            <li>Συλλογή στοιχείων πελατών</li>
+            <li>Βασικά AI automations</li>
+            <li>Μηνιαία παρακολούθηση & υποστήριξη</li>
+          </ul>
+
+        </div>
+
+
+        <!-- AI BUSINESS -->
+        <div class="package">
+
+          <h3>AI BUSINESS</h3>
+
+          <p>
+            Για επιχειρήσεις με μεγαλύτερο όγκο πελατών.
+          </p>
+
+          <ul>
+            <li>Όλα του Starter</li>
+            <li>Προηγμένο chatbot</li>
+            <li>AI email assistance</li>
+            <li>Αυτοματοποιημένα workflows</li>
+            <li>Lead qualification</li>
+            <li>Διασύνδεση με εργαλεία που ήδη χρησιμοποιεί η επιχείρηση</li>
+            <li>Μηνιαίες βελτιστοποιήσεις</li>
+          </ul>
+
+        </div>
+
+
+        <!-- HUMAN CUSTOMER SUPPORT -->
+        <div class="package">
+
+          <h3>HUMAN CUSTOMER SUPPORT</h3>
+
+          <p>
+            Ανθρώπινη υποστήριξη για επιχειρήσεις που θέλουν
+            σταθερή και επαγγελματική επικοινωνία με τους πελάτες τους.
+          </p>
+
+          <p><strong>Basic</strong></p>
+
+          <ul>
+            <li>Email & live chat</li>
+            <li>Βασική διαχείριση πελατών</li>
+            <li>Διαχείριση εισερχόμενων αιτημάτων</li>
+            <li>Customer support</li>
+          </ul>
+
+          <br>
+
+          <p><strong>Business</strong></p>
+
+          <ul>
+            <li>Customer service</li>
+            <li>Back office</li>
+            <li>Μεγαλύτερη διαθεσιμότητα</li>
+            <li>Διαχείριση μεγαλύτερου όγκου αιτημάτων</li>
+          </ul>
+
+        </div>
+
+
+        <!-- AI + HUMAN SUPPORT -->
+        <div class="package">
+
+          <h3>AI + HUMAN SUPPORT</h3>
+
+          <p>
+            Η flagship λύση της ELåiVA που συνδυάζει
+            τεχνητή νοημοσύνη και ανθρώπινη υποστήριξη.
+          </p>
+
+          <ul>
+            <li>AI FAQs</li>
+            <li>Απλές ερωτήσεις</li>
+            <li>Συλλογή πληροφοριών</li>
+            <li>Βασικά αιτήματα</li>
+            <li>AI automations</li>
+            <li>Human customer support</li>
+            <li>Διαχείριση σύνθετων θεμάτων</li>
+            <li>Παράπονα</li>
+            <li>Προσωπική επικοινωνία</li>
+          </ul>
+
+        </div>
+
+      </div>
+
+
+      <div class="note">
+
+        Οι υπηρεσίες διαμορφώνονται εξατομικευμένα,
+        ανάλογα με τις ανάγκες, το μέγεθος και τις απαιτήσεις
+        κάθε επιχείρησης.
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- AI + HUMAN SUPPORT -->
+  <section class="featured">
+
+    <div class="container">
+
+      <div class="section-title">
+        <span>Flagship solution</span>
+        <h2>AI + HUMAN SUPPORT</h2>
+      </div>
+
+      <div class="featured-box">
+
+        <h3>The best of both worlds.</h3>
+
+        <p>
+          Η τεχνητή νοημοσύνη αναλαμβάνει τα απλά και επαναλαμβανόμενα,
+          ενώ ο άνθρωπος αναλαμβάνει όσα χρειάζονται κρίση,
+          κατανόηση και προσωπική επικοινωνία.
+        </p>
+
+        <div class="support-columns">
 
           <div class="support-box">
 
-            <h3>
-              AI handles
-            </h3>
+            <h4>AI handles</h4>
 
             <ul>
               <li>FAQs</li>
@@ -876,14 +839,13 @@
 
           </div>
 
+
           <div class="support-box">
 
-            <h3>
-              Human handles
-            </h3>
+            <h4>Human handles</h4>
 
             <ul>
-              <li>Πιο σύνθετα θέματα</li>
+              <li>Σύνθετα θέματα</li>
               <li>Παράπονα</li>
               <li>Περιπτώσεις που χρειάζονται κρίση</li>
               <li>Προσωπική επικοινωνία</li>
@@ -893,153 +855,131 @@
 
         </div>
 
-        <a href="#contact" class="btn btn-primary">
-          Talk to our team
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- DEMOS -->
+  <section id="demos">
+
+    <div class="container">
+
+      <div class="section-title">
+        <span>Our work</span>
+        <h2>AI Demos</h2>
+      </div>
+
+      <div class="demo">
+
+        <h3>LUNA BEAUTY STUDIO</h3>
+
+        <p>
+          Ένα AI Beauty Assistant σχεδιασμένο για beauty salons,
+          με booking, υπηρεσίες, ακυρώσεις και customer questions.
+        </p>
+
+        <a
+          href="https://luna-beauty-studio-flame.vercel.app/"
+          target="_blank"
+          class="button button-dark"
+        >
+          View live demo
         </a>
 
       </div>
 
-    </section>
+    </div>
 
-    <section class="demos" id="demos">
+  </section>
 
-      <div class="container">
 
-        <div class="section-label">
-          Our work
-        </div>
+  <!-- CONTACT -->
+  <section id="contact" class="contact">
 
-        <h2 class="section-title">
-          AI in action.
-        </h2>
+    <div class="container">
 
-        <p class="section-intro">
-          Δείτε πώς μετατρέπουμε τις ιδέες σε
-          πραγματικές ψηφιακές λύσεις.
-        </p>
+      <div class="contact-content">
 
-        <div class="demo-card">
+        <div class="section-title">
 
-          <div>
+          <span>Let's work together</span>
 
-            <div class="section-label">
-              Featured demo
-            </div>
-
-            <h3>
-              LUNA BEAUTY STUDIO
-            </h3>
-
-            <p>
-              Ένα AI Beauty Assistant σχεδιασμένο
-              για beauty salons, με online booking,
-              υπηρεσίες & τιμές, ακυρώσεις ραντεβού
-              και έξυπνη υποστήριξη πελατών.
-            </p>
-
-            <a
-              href="https://luna-beauty-studio-flame.vercel.app/"
-              target="_blank"
-              class="btn btn-primary"
-            >
-              View demo
-            </a>
-
-          </div>
-
-          <div class="demo-preview">
-
-            <span>
-              LUNA<br>
-              BEAUTY STUDIO
-            </span>
-
-          </div>
-
-        </div>
-
-      </div>
-
-    </section>
-
-    <section class="contact" id="contact">
-
-      <div class="container">
-
-        <div class="contact-content">
-
-          <div class="section-label">
-            Let's work together
-          </div>
-
-          <h2 class="section-title">
+          <h2>
             Ready to make your business smarter?
           </h2>
 
-          <p>
-            Μετά από μια σύντομη επικοινωνία,
-            αξιολογούμε τις ανάγκες της επιχείρησής σας
-            και προτείνουμε την κατάλληλη λύση.
-          </p>
+        </div>
 
-          <div class="contact-details">
 
-            <a href="tel:+306984059324">
-              📞 698 405 9324
-            </a>
+        <p>
+          Μετά από μια σύντομη επικοινωνία, αξιολογούμε τις ανάγκες
+          της επιχείρησής σας και προτείνουμε την κατάλληλη λύση.
+        </p>
 
-            <a href="tel:+306985692512">
-              📞 698 569 2512
-            </a>
 
-            <a href="mailto:elaivatscompany@gmail.com">
-              ✉️ elaivatscompany@gmail.com
-            </a>
+        <a
+          href="mailto:elaivatscompany@gmail.com"
+          class="button button-dark"
+        >
+          Contact ELåiVA
+        </a>
 
-          </div>
 
-          <a
-            href="mailto:elaivatscompany@gmail.com"
-            class="btn btn-primary"
-          >
-            Contact ELåiVA
+        <!-- CONTACT DETAILS -->
+        <div class="contact-info">
+
+          <a href="tel:+306984059324">
+            📞 698 405 9324
+          </a>
+
+          <a href="tel:+306985692512">
+            📞 698 569 2512
+          </a>
+
+          <a href="mailto:elaivatscompany@gmail.com">
+            ✉️ elaivatscompany@gmail.com
           </a>
 
         </div>
 
       </div>
 
-    </section>
+    </div>
 
-  </main>
+  </section>
 
+
+  <!-- FOOTER -->
   <footer>
 
-    <p>
-      <strong>
-        𝑬𝑳å𝒊𝑽𝑨 — 𝑻&𝑺 𝑪𝑶𝑴𝑷𝑨𝑵𝒀
-      </strong>
-    </p>
+    <div class="footer-logo">
+      𝑬𝑳å𝒊𝑽𝑨 — 𝑻&𝑺 𝑪𝑶𝑴𝑷𝑨𝑵𝒀
+    </div>
 
     <p>
       AI solutions designed to make business smarter.
     </p>
 
+
     <div class="footer-contact">
 
       <a href="tel:+306984059324">
-        698 405 9324
+        📞 698 405 9324
       </a>
 
       <a href="tel:+306985692512">
-        698 569 2512
+        📞 698 569 2512
       </a>
 
       <a href="mailto:elaivatscompany@gmail.com">
-        elaivatscompany@gmail.com
+        ✉️ elaivatscompany@gmail.com
       </a>
 
     </div>
+
 
     <p>
       © 2026 ELåiVA — T&S COMPANY. All rights reserved.
@@ -1047,5 +987,20 @@
 
   </footer>
 
+
+  <!-- MOBILE MENU SCRIPT -->
+  <script>
+
+    function toggleMenu() {
+      document.getElementById("mainNav").classList.toggle("active");
+    }
+
+    function closeMenu() {
+      document.getElementById("mainNav").classList.remove("active");
+    }
+
+  </script>
+
 </body>
 </html>
+```
