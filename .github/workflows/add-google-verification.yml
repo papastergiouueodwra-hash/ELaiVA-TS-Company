@@ -14,18 +14,31 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Fix Google verification tag
+      - name: Fix Google verification and SEO metadata
         run: |
           python3 - <<'PY'
           from pathlib import Path
           p = Path('index.html')
           s = p.read_text(encoding='utf-8')
+
+          # Keep only the correct Google Search Console verification tag.
           wrong = '<meta name="google-site-verification" content="googlecbf7801c53375169.html">'
           s = s.replace(wrong + '\n', '')
           s = s.replace(wrong, '')
           correct = '<meta name="google-site-verification" content="gDEKzyrUVKuHXyb8VN_9KzeLC9QOqvjEdoKUTZckPjM" />'
           if correct not in s:
               s = s.replace('</head>', '  ' + correct + '\n</head>', 1)
+
+          # Improve the page metadata used by search engines and social previews.
+          old_description = '<meta\n    name="description"\n    content="ELåiVA — T&S COMPANY. AI solutions, automation and human customer support designed to make business smarter."\n  >'
+          new_description = '<meta\n    name="description"\n    content="ELåiVA — T&S COMPANY. AI solutions, business automation, AI chatbots, customer support and smart digital solutions for modern businesses."\n  >'
+          if old_description in s:
+              s = s.replace(old_description, new_description, 1)
+
+          seo_tags = '''  <link rel="canonical" href="https://papastergiouueodwra-hash.github.io/ELaiVA-TS-Company/">\n  <meta name="robots" content="index, follow">\n  <meta property="og:title" content="ELåiVA — T&S COMPANY | AI Solutions & Automation">\n  <meta property="og:description" content="AI solutions, business automation, AI chatbots and customer support designed to make businesses smarter.">\n  <meta property="og:type" content="website">\n  <meta property="og:url" content="https://papastergiouueodwra-hash.github.io/ELaiVA-TS-Company/">\n'''
+          if '<link rel="canonical"' not in s:
+              s = s.replace('</head>', seo_tags + '</head>', 1)
+
           p.write_text(s, encoding='utf-8')
           PY
 
@@ -34,5 +47,5 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add index.html
-          git diff --cached --quiet || git commit -m "Fix Google Search verification tag"
+          git diff --cached --quiet || git commit -m "Improve SEO metadata"
           git push
