@@ -14,10 +14,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Fix Google verification and SEO metadata
+      - name: Fix verification and strengthen SEO
         run: |
           python3 - <<'PY'
           from pathlib import Path
+          import re
+
           p = Path('index.html')
           s = p.read_text(encoding='utf-8')
 
@@ -29,15 +31,48 @@ jobs:
           if correct not in s:
               s = s.replace('</head>', '  ' + correct + '\n</head>', 1)
 
-          # Improve the page metadata used by search engines and social previews.
-          old_description = '<meta\n    name="description"\n    content="ELåiVA — T&S COMPANY. AI solutions, automation and human customer support designed to make business smarter."\n  >'
-          new_description = '<meta\n    name="description"\n    content="ELåiVA — T&S COMPANY. AI solutions, business automation, AI chatbots, customer support and smart digital solutions for modern businesses."\n  >'
-          if old_description in s:
-              s = s.replace(old_description, new_description, 1)
+          # Homepage SEO title and description.
+          s = re.sub(
+              r'<title>.*?</title>',
+              '<title>ELåiVA — T&S COMPANY | AI Solutions, Website Development &amp; Automation</title>',
+              s,
+              count=1,
+              flags=re.S
+          )
 
-          seo_tags = '''  <link rel="canonical" href="https://papastergiouueodwra-hash.github.io/ELaiVA-TS-Company/">\n  <meta name="robots" content="index, follow">\n  <meta property="og:title" content="ELåiVA — T&S COMPANY | AI Solutions & Automation">\n  <meta property="og:description" content="AI solutions, business automation, AI chatbots and customer support designed to make businesses smarter.">\n  <meta property="og:type" content="website">\n  <meta property="og:url" content="https://papastergiouueodwra-hash.github.io/ELaiVA-TS-Company/">\n'''
+          description = 'ELåiVA — T&S COMPANY. AI solutions, website development, website creation, business automation, AI chatbots, customer support and smart digital solutions for modern businesses in Greece.'
+          s = re.sub(
+              r'<meta\s+name="description"\s+content=".*?"\s*/?>',
+              '<meta\n    name="description"\n    content="' + description + '"\n  >',
+              s,
+              count=1,
+              flags=re.S
+          )
+
+          # Stronger social/search metadata.
+          seo_tags = '''  <link rel="canonical" href="https://papastergiouueodwra-hash.github.io/ELaiVA-TS-Company/">\n  <meta name="robots" content="index, follow">\n  <meta name="keywords" content="AI solutions Greece, AI automation Greece, website development Greece, website creation Greece, κατασκευή ιστοσελίδων, δημιουργία ιστοσελίδων, AI chatbots, business automation, customer support, Θεσσαλονίκη">\n  <meta property="og:title" content="ELåiVA — T&S COMPANY | AI Solutions, Website Development &amp; Automation">\n  <meta property="og:description" content="AI solutions, modern website development, business automation, AI chatbots and customer support for modern businesses in Greece.">\n  <meta property="og:type" content="website">\n  <meta property="og:url" content="https://papastergiouueodwra-hash.github.io/ELaiVA-TS-Company/">\n'''
+          s = re.sub(r'\s*<link rel="canonical".*?<meta property="og:url"[^>]*>\s*', '\n', s, count=1, flags=re.S) if '<link rel="canonical"' in s else s
           if '<link rel="canonical"' not in s:
               s = s.replace('</head>', seo_tags + '</head>', 1)
+
+          # Make the hero explicitly communicate website creation/development.
+          old_h1 = '<h1>\n  Make your business smarter.\n</h1>'
+          new_h1 = '<h1>\n  AI Solutions, Website Development &amp; Business Automation\n</h1>'
+          if old_h1 in s:
+              s = s.replace(old_h1, new_h1, 1)
+
+          old_p = '''<p>\n  AI solutions designed to make business smarter.\n  We help businesses automate everyday processes,\n  save time and improve efficiency.\n</p>'''
+          new_p = '''<p>\n  We create modern websites, AI chatbots and business automation solutions\n  that help businesses build a stronger digital presence, save time and improve efficiency.\n</p>'''
+          if old_p in s:
+              s = s.replace(old_p, new_p, 1)
+
+          # Add a compact website-development keyword paragraph if the homepage does not already mention it.
+          marker = '<!-- ELaiVA SEO SERVICES -->'
+          if marker not in s:
+              block = '''\n<section class="seo-services" aria-label="ELåiVA digital services">\n  <div class="container">\n    <h2>Website Development, AI &amp; Business Automation</h2>\n    <p>\n      ELåiVA creates modern business websites, landing pages and AI-powered digital experiences,\n      combined with AI chatbots, workflow automation and customer support solutions for businesses in Greece.\n    </p>\n  </div>\n</section>\n<!-- ELaiVA SEO SERVICES -->\n'''
+              # Place before the demos section so the content is visible to users and search engines.
+              if '<section id="demos">' in s:
+                  s = s.replace('<section id="demos">', block + '\n<section id="demos">', 1)
 
           p.write_text(s, encoding='utf-8')
           PY
@@ -47,5 +82,5 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add index.html
-          git diff --cached --quiet || git commit -m "Improve SEO metadata"
+          git diff --cached --quiet || git commit -m "Strengthen website development SEO"
           git push
