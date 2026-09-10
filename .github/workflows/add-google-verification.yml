@@ -24,7 +24,7 @@ jobs:
           s = p.read_text(encoding='utf-8')
 
           # 1) Restore the approved Human Customer Support copy without changing layout.
-          old_support = 'Human customer support when your business needs it.'
+          old_support = 'Ανθρώπινη υποστήριξη για επιχειρήσεις που θέλουν προσωπική και σταθερή επικοινωνία με τους πελάτες τους.'
           support_paragraphs = '''<p>
         Παράλληλα με τις AI λύσεις μας, προσφέρουμε Human Customer Support για επιχειρήσεις που θέλουν να συνδυάσουν την τεχνολογία με την ανθρώπινη επικοινωνία.
       </p>
@@ -44,20 +44,18 @@ jobs:
               s = s.replace(old_support, support_paragraphs, 1)
 
           # 2) Restore the correct CTA copy.
-          s = s.replace("Let's build something smarter.", "READY TO MAKE YOUR BUSINESS SMARTER? CONTACT US", 1)
+          s = s.replace("Let's build something smarter.", "READY TO MAKE YOUR BUSINESS SMARTER?", 1)
 
-          # Remove the incorrect placeholder contact email and restore the approved email.
+          # Remove only the incorrect placeholder contact email.
           s = s.replace('contact@elaiva.gr', 'elaivatscompany@gmail.com')
           s = s.replace('mailto\\:contact@elaiva.gr', 'mailto:elaivatscompany@gmail.com')
 
-          # 3) Restore all three approved phone numbers wherever the incorrect placeholder phone was used.
-          phones_html = '''<a href="tel:+306984059324">+30 698 405 9324</a>
+          # 3) Replace only the incorrect placeholder phone with all three approved numbers.
+          old_phone_block = '''<a href="tel:+306900000000">+30 690 000 0000</a>'''
+          new_phone_block = '''<a href="tel:+306984059324">+30 698 405 9324</a>
       <a href="tel:+306985692512">+30 698 569 2512</a>
       <a href="tel:+306973679762">+30 697 367 9762</a>'''
-          pattern = r'<a\s+href=["\']tel:\+306900000000["\'][^>]*>\+?30?\s*690\s*000\s*0000</a>'
-          s = re.sub(pattern, phones_html, s)
-
-          # Also replace a plain placeholder phone if one remains, without touching other content.
+          s = s.replace(old_phone_block, new_phone_block)
           s = s.replace('+30 690 000 0000', '+30 698 405 9324')
 
           p.write_text(s, encoding='utf-8')
