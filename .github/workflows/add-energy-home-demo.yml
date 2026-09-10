@@ -1,0 +1,37 @@
+name: Add Energy Home Demo
+
+on:
+  workflow_dispatch:
+
+jobs:
+  update-demo:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Add Energy Home demo
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p = Path('index.html')
+          s = p.read_text(encoding='utf-8')
+          marker = '''      </div>\n\n    </div>\n\n  </section>\n\n\n  <!-- CONTACT -->'''
+          card = '''      </div>\n\n      <br><br>\n\n      <div class="demo">\n\n        <h3>⚡ ENERGY HOME</h3>\n\n        <p>\n          Energy &amp; Gas lead-generation demo with offers, quiz, calculator and AI energy assistant.\n        </p>\n\n        <a\n          href="https://energy-home-pearl.vercel.app/"\n          target="_blank"\n          rel="noopener noreferrer"\n          class="button button-dark"\n        >\n          View Demo →\n        </a>\n\n      </div>\n\n    </div>\n\n  </section>\n\n\n  <!-- CONTACT -->'''
+          if 'href="https://energy-home-pearl.vercel.app/"' in s:
+              print('Energy Home demo already present')
+              raise SystemExit(0)
+          if marker not in s:
+              raise SystemExit('Demos section marker not found; no changes made')
+          p.write_text(s.replace(marker, card, 1), encoding='utf-8')
+          PY
+
+      - name: Commit change
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          git diff --cached --quiet || git commit -m "Add Energy Home to AI Demos"
+          git push
