@@ -1,0 +1,51 @@
+name: Update company email
+
+on:
+  workflow_run:
+    workflows:
+      - Add Energy Home Demo
+    types:
+      - completed
+
+permissions:
+  contents: write
+
+jobs:
+  update-email:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Replace company email only
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p = Path("index.html")
+          s = p.read_text(encoding="utf-8")
+          old = "elaivatscompany@gmail.com"
+          new = "info@elaiva.site"
+          if old not in s:
+              print("Old email not found; nothing to change.")
+          else:
+              s2 = s.replace(old, new)
+              p.write_text(s2, encoding="utf-8")
+              print(f"Replaced {s.count(old)} occurrence(s).")
+          PY
+
+      - name: Remove temporary files
+        run: rm -f .github/workflows/replace-company-email.yml .github/email-update-trigger.txt
+
+      - name: Commit only the email change
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          git add -u .github/workflows/replace-company-email.yml .github/email-update-trigger.txt
+          if git diff --cached --quiet; then
+            echo "No changes to commit."
+            exit 0
+          fi
+          git commit -m "Update company email to info@elaiva.site"
+          git push
