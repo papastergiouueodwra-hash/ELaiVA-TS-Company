@@ -3,557 +3,70 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
   <title>ELåiVA — T&S COMPANY | AI Solutions, Website Development &amp; Automation</title>
-
-  <meta
-    name="description"
-    content="ELåiVA — T&S COMPANY. AI solutions, website development, website creation, business automation, AI chatbots, customer support and smart digital solutions for modern businesses in Greece."
-  >
-
+  <meta name="description" content="ELåiVA — T&S COMPANY. AI solutions, website development, website creation, business automation, AI chatbots, customer support and smart digital solutions for modern businesses in Greece.">
   <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    html {
-      scroll-behavior: smooth;
-    }
-
-    body {
-      font-family: Arial, Helvetica, sans-serif;
-      background: #f8f7f4;
-      color: #222;
-      line-height: 1.6;
-      overflow-x: hidden;
-    }
-
-    a {
-      color: inherit;
-      text-decoration: none;
-    }
-
-    /* HEADER */
-    header {
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-      background: rgba(248, 247, 244, 0.97);
-      border-bottom: 1px solid #ddd;
-      backdrop-filter: blur(10px);
-    }
-
-    .header-inner {
-      max-width: 1200px;
-      margin: auto;
-      padding: 18px 30px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 25px;
-    }
-
-    .logo {
-      font-size: 20px;
-      font-weight: bold;
-      white-space: nowrap;
-    }
-
-    nav {
-      display: flex;
-      gap: 25px;
-      align-items: center;
-    }
-
-    nav a {
-      font-size: 14px;
-      transition: opacity 0.2s;
-    }
-
-    nav a:hover {
-      opacity: 0.55;
-    }
-
-    .menu-button {
-      display: none;
-      background: none;
-      border: none;
-      font-size: 28px;
-      cursor: pointer;
-    }
-
-    /* HERO */
-    .hero {
-      min-height: 90vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 80px 25px;
-      background: linear-gradient(135deg, #f8f7f4, #ebe8e2);
-    }
-
-    .hero-content {
-      max-width: 900px;
-    }
-
-    .hero-small {
-      font-size: 14px;
-      letter-spacing: 3px;
-      text-transform: uppercase;
-      margin-bottom: 20px;
-    }
-
-    .hero h1 {
-      font-size: clamp(42px, 7vw, 82px);
-      line-height: 1.05;
-      margin-bottom: 25px;
-    }
-
-    .hero-brand {
-      font-size: clamp(20px, 3vw, 32px);
-      margin-bottom: 20px;
-    }
-
-    .hero p {
-      max-width: 700px;
-      margin: 0 auto 30px;
-      font-size: 18px;
-      color: #555;
-    }
-
-    .buttons {
-      display: flex;
-      justify-content: center;
-      gap: 15px;
-      flex-wrap: wrap;
-    }
-
-    .button {
-      display: inline-block;
-      padding: 14px 25px;
-      border: 1px solid #222;
-      border-radius: 30px;
-      transition: all 0.25s;
-    }
-
-    .button:hover {
-      background: #222;
-      color: white;
-    }
-
-    .button-dark {
-      background: #222;
-      color: white;
-    }
-
-    /* SECTIONS */
-    section {
-      padding: 100px 25px;
-    }
-
-    .container {
-      max-width: 1100px;
-      margin: auto;
-    }
-
-    .section-title {
-      text-align: center;
-      margin-bottom: 55px;
-    }
-
-    .section-title span {
-      display: block;
-      font-size: 13px;
-      letter-spacing: 3px;
-      text-transform: uppercase;
-      margin-bottom: 12px;
-      color: #777;
-    }
-
-    .section-title h2 {
-      font-size: clamp(32px, 5vw, 50px);
-    }
-
-    .about-text {
-      max-width: 850px;
-      margin: auto;
-      text-align: center;
-      font-size: 18px;
-      color: #555;
-    }
-
-    /* SERVICES */
-    .cards {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 25px;
-    }
-
-    .card {
-      background: white;
-      border: 1px solid #ddd;
-      padding: 35px;
-      border-radius: 18px;
-    }
-
-    .card h3 {
-      font-size: 25px;
-      margin-bottom: 18px;
-    }
-
-    .card p {
-      color: #666;
-      margin-bottom: 20px;
-    }
-
-    .card ul {
-      list-style: none;
-    }
-
-    .card li {
-      margin: 10px 0;
-    }
-
-    .card li::before {
-      content: "✓ ";
-    }
-
-    /* PACKAGES */
-    #packages {
-      background: #111;
-      color: white;
-    }
-
-    #packages .section-title span {
-      color: #d6b8c8;
-    }
-
-    #packages .section-title h2 {
-      color: white;
-    }
-
-    .package-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 25px;
-    }
-
-    .package {
-      background: #f3dbe7;
-      color: #222;
-      border: 1px solid #e5b8cd;
-      border-radius: 18px;
-      padding: 35px;
-      transition: transform 0.25s, box-shadow 0.25s;
-    }
-
-    .package:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 12px 30px rgba(243, 219, 231, 0.15);
-    }
-
-    .package h3 {
-      font-size: 24px;
-      margin-bottom: 15px;
-    }
-
-    .package p {
-      color: #555;
-      margin-bottom: 20px;
-    }
-
-    .package ul {
-      list-style: none;
-    }
-
-    .package li {
-      margin: 9px 0;
-    }
-
-    .package li::before {
-      content: "✓ ";
-    }
-
-    .note {
-      max-width: 850px;
-      margin: 45px auto 0;
-      text-align: center;
-      font-size: 14px;
-      color: #bbb;
-    }
-
-    /* FEATURED */
-    .featured {
-      background: #222;
-      color: white;
-    }
-
-    .featured .section-title span {
-      color: #bbb;
-    }
-
-    .featured-box {
-      max-width: 900px;
-      margin: auto;
-      text-align: center;
-    }
-
-    .featured-box h3 {
-      font-size: 35px;
-      margin-bottom: 20px;
-    }
-
-    .featured-box p {
-      color: #ccc;
-      font-size: 18px;
-      margin-bottom: 30px;
-    }
-
-    .support-columns {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 25px;
-      margin-top: 40px;
-    }
-
-    .support-box {
-      border: 1px solid #555;
-      padding: 30px;
-      border-radius: 18px;
-      text-align: left;
-    }
-
-    .support-box h4 {
-      margin-bottom: 15px;
-      font-size: 21px;
-    }
-
-    .support-box ul {
-      list-style: none;
-    }
-
-    .support-box li {
-      margin: 8px 0;
-      color: #ddd;
-    }
-
-    /* HUMAN CUSTOMER SUPPORT */
-    .human-support-text {
-      max-width: 900px;
-      margin: 50px auto 35px;
-      text-align: center;
-    }
-
-    .human-support-text h3 {
-      font-size: 30px;
-      margin-bottom: 22px;
-    }
-
-    .human-support-text p {
-      color: #ccc;
-      font-size: 18px;
-      margin-bottom: 18px;
-    }
-
-    .human-support-text .button {
-      margin-top: 12px;
-    }
-
-    /* DEMOS */
-    .demo {
-      background: white;
-      border: 1px solid #ddd;
-      border-radius: 20px;
-      padding: 40px;
-      text-align: center;
-      max-width: 850px;
-      margin: auto;
-    }
-
-    .demo h3 {
-      font-size: 30px;
-      margin-bottom: 15px;
-    }
-
-    .demo p {
-      color: #666;
-      margin-bottom: 25px;
-    }
-
-    /* CONTACT */
-    .contact {
-      text-align: center;
-      background: #ebe8e2;
-    }
-
-    .contact-content {
-      max-width: 800px;
-      margin: auto;
-    }
-
-    .contact-content h2 {
-      font-size: clamp(35px, 5vw, 55px);
-      margin-bottom: 20px;
-    }
-
-    .contact-content p {
-      color: #555;
-      margin-bottom: 30px;
-    }
-
-    .contact-info {
-      margin-top: 30px;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      align-items: center;
-      font-size: 17px;
-    }
-
-    .contact-info a {
-      transition: opacity 0.2s;
-    }
-
-    .contact-info a:hover {
-      opacity: 0.55;
-    }
-
-    /* FOOTER */
-    footer {
-      background: #222;
-      color: white;
-      text-align: center;
-      padding: 50px 25px;
-    }
-
-    footer .footer-logo {
-      font-size: 22px;
-      font-weight: bold;
-      margin-bottom: 10px;
-    }
-
-    footer p {
-      color: #bbb;
-      margin: 8px 0;
-    }
-
-    footer .footer-contact {
-      margin: 20px 0;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    footer a:hover {
-      opacity: 0.7;
-    }
-
-    /* MOBILE */
-    @media (max-width: 768px) {
-
-      .header-inner {
-        padding: 15px 20px;
-      }
-
-      .logo {
-        font-size: 16px;
-        white-space: normal;
-        max-width: 80%;
-      }
-
-      .menu-button {
-        display: block;
-      }
-
-      nav {
-        display: none;
-        position: absolute;
-        top: 100%;
-        left: 0;
-        right: 0;
-        background: #f8f7f4;
-        border-bottom: 1px solid #ddd;
-        flex-direction: column;
-        padding: 20px;
-        gap: 18px;
-      }
-
-      nav.active {
-        display: flex;
-      }
-
-      nav a {
-        font-size: 16px;
-      }
-
-      .hero {
-        min-height: 80vh;
-        padding: 70px 20px;
-      }
-
-      .hero h1 {
-        font-size: 43px;
-      }
-
-      .hero p {
-        font-size: 16px;
-      }
-
-      section {
-        padding: 70px 20px;
-      }
-
-      .cards,
-      .package-grid,
-      .support-columns {
-        grid-template-columns: 1fr;
-      }
-
-      .card,
-      .package,
-      .demo {
-        padding: 25px;
-      }
-
-      .contact-info {
-        font-size: 16px;
-      }
-
-      .buttons {
-        flex-direction: column;
-        align-items: stretch;
-      }
-
-      .button {
-        text-align: center;
-      }
-
-      .section-title {
-        margin-bottom: 40px;
-      }
-
-      .section-title h2 {
-        font-size: 34px;
-      }
-
-      .featured-box h3 {
-        font-size: 28px;
-      }
-
-      .human-support-text {
-        margin-top: 45px;
-      }
-
-      .human-support-text h3 {
-        font-size: 27px;
-      }
-
-      .human-support-text p {
-        font-size: 16px;
-      }
+    *{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{font-family:Arial,Helvetica,sans-serif;background:#f8f7f4;color:#222;line-height:1.6;overflow-x:hidden}
+    a{color:inherit;text-decoration:none}
+    header{position:sticky;top:0;z-index:1000;background:rgba(248,247,244,.97);border-bottom:1px solid #ddd;backdrop-filter:blur(10px)}
+    .header-inner{max-width:1200px;margin:auto;padding:18px 30px;display:flex;align-items:center;justify-content:space-between;gap:25px}
+    .logo{font-size:20px;font-weight:bold;white-space:nowrap}
+    nav{display:flex;gap:25px;align-items:center}
+    nav a{font-size:14px;transition:opacity .2s}
+    nav a:hover{opacity:.55}
+    .menu-button{display:none;background:none;border:none;font-size:28px;cursor:pointer}
+    .hero{min-height:90vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:80px 25px;background:linear-gradient(135deg,#f8f7f4,#ebe8e2)}
+    .hero-content{max-width:900px}
+    .hero-small{font-size:14px;letter-spacing:3px;text-transform:uppercase;margin-bottom:20px}
+    .hero h1{font-size:clamp(42px,7vw,82px);line-height:1.05;margin-bottom:25px}
+    .hero-brand{font-size:clamp(20px,3vw,32px);margin-bottom:20px}
+    .hero p{max-width:700px;margin:0 auto 30px;font-size:18px;color:#555}
+    .buttons{display:flex;justify-content:center;gap:15px;flex-wrap:wrap}
+    .button{display:inline-block;padding:14px 25px;border:1px solid #222;border-radius:30px;transition:all .25s}
+    .button:hover{background:#222;color:white}
+    .button-dark{background:#222;color:white}
+    section{padding:100px 25px}
+    .container{max-width:1100px;margin:auto}
+    .section-title{text-align:center;margin-bottom:55px}
+    .section-title span{display:block;font-size:13px;letter-spacing:3px;text-transform:uppercase;margin-bottom:12px;color:#777}
+    .section-title h2{font-size:clamp(32px,5vw,50px)}
+    .about-text{max-width:850px;margin:auto;text-align:center;font-size:18px;color:#555}
+    .cards{display:grid;grid-template-columns:repeat(2,1fr);gap:25px}
+    .card{background:white;border:1px solid #ddd;padding:35px;border-radius:18px}
+    .card h3{font-size:25px;margin-bottom:18px}
+    .card p{color:#666;margin-bottom:20px}
+    .card ul{list-style:none}.card li{margin:10px 0}.card li::before{content:"✓ "}
+    #packages{background:#111;color:white}#packages .section-title span{color:#d6b8c8}#packages .section-title h2{color:white}
+    .package-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:25px}
+    .package{background:#f3dbe7;color:#222;border:1px solid #e5b8cd;border-radius:18px;padding:35px;transition:transform .25s,box-shadow .25s}
+    .package:hover{transform:translateY(-5px);box-shadow:0 12px 30px rgba(243,219,231,.15)}
+    .package h3{font-size:24px;margin-bottom:15px}.package p{color:#555;margin-bottom:20px}.package ul{list-style:none}.package li{margin:9px 0}.package li::before{content:"✓ "}
+    .note{max-width:850px;margin:45px auto 0;text-align:center;font-size:14px;color:#bbb}
+    .featured{background:#222;color:white}.featured .section-title span{color:#bbb}.featured-box{max-width:900px;margin:auto;text-align:center}.featured-box h3{font-size:35px;margin-bottom:20px}.featured-box p{color:#ccc;font-size:18px;margin-bottom:30px}
+    .support-columns{display:grid;grid-template-columns:1fr 1fr;gap:25px;margin-top:40px}.support-box{border:1px solid #555;padding:30px;border-radius:18px;text-align:left}.support-box h4{margin-bottom:15px;font-size:21px}.support-box ul{list-style:none}.support-box li{margin:8px 0;color:#ddd}
+    .human-support-text{max-width:900px;margin:50px auto 35px;text-align:center}.human-support-text h3{font-size:30px;margin-bottom:22px}.human-support-text p{color:#ccc;font-size:18px;margin-bottom:18px}.human-support-text .button{margin-top:12px}
+    .demo{background:white;border:1px solid #ddd;border-radius:20px;padding:40px;text-align:center;max-width:850px;margin:auto}.demo h3{font-size:30px;margin-bottom:15px}.demo p{color:#666;margin-bottom:25px}
+    .contact{text-align:center;background:#ebe8e2}.contact-content{max-width:800px;margin:auto}.contact-content h2{font-size:clamp(35px,5vw,55px);margin-bottom:20px}.contact-content p{color:#555;margin-bottom:30px}.contact-info{margin-top:30px;display:flex;flex-direction:column;gap:10px;align-items:center;font-size:17px}.contact-info a{transition:opacity .2s}.contact-info a:hover{opacity:.55}
+    footer{background:#222;color:white;text-align:center;padding:50px 25px}footer .footer-logo{font-size:22px;font-weight:bold;margin-bottom:10px}footer p{color:#bbb;margin:8px 0}footer .footer-contact{margin:20px 0;display:flex;flex-direction:column;gap:8px}footer a:hover{opacity:.7}
+    /* BOOK A MEETING */
+    #elaivaMeetingButton{position:fixed;left:18px;top:50%;transform:translateY(-50%);z-index:1500;display:none;border:0;border-radius:0 14px 14px 0;padding:15px 20px;background:#f3dbe7;color:#222;font-weight:bold;font-size:14px;cursor:pointer;box-shadow:0 8px 24px rgba(0,0,0,.18)}
+    #elaivaMeetingButton.visible{display:block}
+    #elaivaMeetingOverlay{position:fixed;inset:0;z-index:2000;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(0,0,0,.62)}
+    #elaivaMeetingOverlay.open{display:flex}
+    .elaiva-meeting-modal{position:relative;width:min(520px,100%);max-height:90vh;overflow-y:auto;background:#f8f7f4;color:#222;border-radius:20px;padding:32px;box-shadow:0 25px 70px rgba(0,0,0,.3)}
+    .elaiva-meeting-modal h2{font-size:30px;margin-bottom:8px}.elaiva-meeting-modal>p{color:#666;margin-bottom:22px}
+    .elaiva-meeting-close{position:absolute;top:12px;right:16px;border:0;background:transparent;font-size:28px;line-height:1;cursor:pointer;color:#555}
+    .elaiva-meeting-form{display:grid;gap:14px}.elaiva-meeting-form label{display:grid;gap:6px;font-size:14px;font-weight:bold}
+    .elaiva-meeting-form input,.elaiva-meeting-form select{width:100%;padding:13px 14px;border:1px solid #ccc;border-radius:10px;background:white;color:#222;font:inherit}
+    .elaiva-meeting-submit{margin-top:5px;width:100%;padding:14px 20px;border:1px solid #222;border-radius:30px;background:#222;color:white;font:inherit;font-weight:bold;cursor:pointer}.elaiva-meeting-submit:disabled{opacity:.65;cursor:wait}
+    #elaivaMeetingMessage{min-height:24px;margin-top:8px;font-size:14px;font-weight:bold}#elaivaMeetingMessage.success{color:#176b35}#elaivaMeetingMessage.error{color:#a12626}
+    @media(max-width:768px){
+      .header-inner{padding:15px 20px}.logo{font-size:16px;white-space:normal;max-width:80%}.menu-button{display:block}
+      nav{display:none;position:absolute;top:100%;left:0;right:0;background:#f8f7f4;border-bottom:1px solid #ddd;flex-direction:column;padding:20px;gap:18px}nav.active{display:flex}nav a{font-size:16px}
+      .hero{min-height:80vh;padding:70px 20px}.hero h1{font-size:43px}.hero p{font-size:16px}section{padding:70px 20px}.cards,.package-grid,.support-columns{grid-template-columns:1fr}.card,.package,.demo{padding:25px}.contact-info{font-size:16px}.buttons{flex-direction:column;align-items:stretch}.button{text-align:center}.section-title{margin-bottom:40px}.section-title h2{font-size:34px}.featured-box h3{font-size:28px}.human-support-text{margin-top:45px}.human-support-text h3{font-size:27px}.human-support-text p{font-size:16px}
+      #elaivaMeetingButton{left:0;top:auto;bottom:20px;transform:none;border-radius:0 14px 14px 0;padding:13px 16px}.elaiva-meeting-modal{padding:27px 20px}
     }
   </style>
   <meta name="google-site-verification" content="gDEKzyrUVKuHXyb8VN_9KzeLC9QOqvjEdoKUTZckPjM" />
@@ -565,439 +78,37 @@
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://papastergiouueodwra-hash.github.io/ELaiVA-TS-Company/">
 </head>
-
 <body>
-
-  <!-- HEADER -->
-  <header>
-    <div class="header-inner">
-
-      <div class="logo">
-        𝑬𝑳å𝒊𝑽𝑨 — 𝑻&𝑺 𝑪𝑶𝑴𝑷𝑨𝑵𝒀
-      </div>
-
-      <button
-        class="menu-button"
-        onclick="toggleMenu()"
-        aria-label="Open menu"
-      >
-        ☰
-      </button>
-
-      <nav id="mainNav">
-        <a href="#about" onclick="closeMenu()">About</a>
-        <a href="#services" onclick="closeMenu()">Services</a>
-        <a href="#packages" onclick="closeMenu()">Packages</a>
-        <a href="#demos" onclick="closeMenu()">Demos</a>
-        <a href="#contact" onclick="closeMenu()">Contact</a>
-      </nav>
-
-    </div>
-  </header>
-
-
-  <!-- HERO -->
-  <section class="hero">
-
-    <div class="hero-content">
-
-      <div class="hero-small">
-        AI • Automation • Human Support
-      </div>
-
-      <h1>
-        Make your business smarter.
-      </h1>
-
-      <div class="hero-brand">
-        𝑬𝑳å𝒊𝑽𝑨 — 𝑻&𝑺 𝑪𝑶𝑴𝑷𝑨𝑵𝒀
-      </div>
-
-      <p>
-        AI solutions designed to make business smarter.
-        We help businesses automate everyday processes,
-        save time and improve efficiency.
-      </p>
-
-      <div class="buttons">
-
-        <a href="#contact" class="button button-dark">
-          Book a consultation
-        </a>
-
-        <a href="#services" class="button">
-          Explore our services
-        </a>
-
-      </div>
-
-    </div>
-
-  </section>
-
-
-  <!-- ABOUT -->
-  <section id="about">
-
-    <div class="container">
-
-      <div class="section-title">
-        <span>About ELåiVA</span>
-        <h2>Technology that works for your business.</h2>
-      </div>
-
-      <div class="about-text">
-
-        <p>
-          Η ELåiVA — T&S COMPANY είναι μια σύγχρονη εταιρεία τεχνολογίας
-          που αξιοποιεί τη δύναμη της Τεχνητής Νοημοσύνης (AI) για να βοηθά
-          επιχειρήσεις να εξελίσσονται και να λειτουργούν πιο έξυπνα.
-          Δημιουργούμε και εφαρμόζουμε λύσεις AI, αυτοματισμούς και ψηφιακά
-          εργαλεία που μειώνουν τον χρόνο που απαιτούν οι καθημερινές εργασίες,
-          βελτιώνουν την εξυπηρέτηση πελατών και βοηθούν τις επιχειρήσεις να
-          λειτουργούν πιο αποτελεσματικά.
-        </p>
-
-      </div>
-
-    </div>
-
-  </section>
-
-
-  <!-- SERVICES -->
-  <section id="services">
-
-    <div class="container">
-
-      <div class="section-title">
-        <span>What we do</span>
-        <h2>AI &amp; Business Solutions</h2>
-      </div>
-
-      <div class="cards">
-
-        <div class="card">
-          <h3>AI Solutions</h3>
-          <p>AI εργαλεία σχεδιασμένα σύμφωνα με τις ανάγκες κάθε επιχείρησης.</p>
-          <ul>
-            <li>AI Chatbots</li>
-            <li>AI Assistants</li>
-            <li>FAQ Automation</li>
-            <li>AI Email Assistance</li>
-            <li>Lead Qualification</li>
-          </ul>
-        </div>
-
-        <div class="card">
-          <h3>Business Automation</h3>
-          <p>Αυτοματοποιούμε επαναλαμβανόμενες διαδικασίες και εξοικονομούμε χρόνο.</p>
-          <ul>
-            <li>Automated Workflows</li>
-            <li>Customer Management</li>
-            <li>Lead Management</li>
-            <li>Internal Processes</li>
-            <li>Business Integrations</li>
-          </ul>
-        </div>
-
-        <div class="card">
-          <h3>Digital Experiences</h3>
-          <p>Σύγχρονες ψηφιακές εμπειρίες που βοηθούν τις επιχειρήσεις να ξεχωρίζουν.</p>
-          <ul>
-            <li>Business Websites</li>
-            <li>AI-Powered Websites</li>
-            <li>Landing Pages</li>
-            <li>Digital Customer Journeys</li>
-            <li>Online Lead Generation</li>
-          </ul>
-        </div>
-
-        <div class="card">
-          <h3>Human Customer Support</h3>
-          <p>Αναλαμβάνουμε την καθημερινή επικοινωνία με τους πελάτες σας.</p>
-          <ul>
-            <li>Email Support</li>
-            <li>Live Chat</li>
-            <li>Customer Service</li>
-            <li>Back Office</li>
-            <li>Incoming Requests</li>
-          </ul>
-        </div>
-
-      </div>
-
-    </div>
-
-  </section>
-
-
-  <!-- PACKAGES -->
-  <section id="packages">
-
-    <div class="container">
-
-      <div class="section-title">
-        <span>Our solutions</span>
-        <h2>Packages for modern businesses.</h2>
-      </div>
-
-      <div class="package-grid">
-
-        <div class="package">
-          <h3>AI Starter</h3>
-          <p>Για επιχειρήσεις που θέλουν να ξεκινήσουν με AI.</p>
-          <ul>
-            <li>AI Assistant</li>
-            <li>FAQ Automation</li>
-            <li>Basic Lead Capture</li>
-            <li>Basic Website Integration</li>
-          </ul>
-        </div>
-
-        <div class="package">
-          <h3>Business Automation</h3>
-          <p>Για επιχειρήσεις που θέλουν να αυτοματοποιήσουν διαδικασίες.</p>
-          <ul>
-            <li>Automated Workflows</li>
-            <li>Lead Management</li>
-            <li>Customer Management</li>
-            <li>Business Integrations</li>
-          </ul>
-        </div>
-
-        <div class="package">
-          <h3>AI Growth</h3>
-          <p>Για επιχειρήσεις που θέλουν ένα ολοκληρωμένο AI οικοσύστημα.</p>
-          <ul>
-            <li>Custom AI Solutions</li>
-            <li>Advanced Automation</li>
-            <li>Lead Qualification</li>
-            <li>Digital Customer Experience</li>
-          </ul>
-        </div>
-
-        <div class="package">
-          <h3>Human Support</h3>
-          <p>Για επιχειρήσεις που χρειάζονται εξωτερική υποστήριξη πελατών.</p>
-          <ul>
-            <li>Email Support</li>
-            <li>Live Chat</li>
-            <li>Customer Service</li>
-            <li>Back Office</li>
-          </ul>
-        </div>
-
-      </div>
-
-      <p class="note">
-        Κάθε λύση μπορεί να προσαρμοστεί ανάλογα με το μέγεθος, τις ανάγκες και τους στόχους της επιχείρησης.
-      </p>
-
-    </div>
-
-  </section>
-
-
-  <!-- FEATURED -->
-  <section class="featured">
-
-    <div class="container">
-
-      <div class="section-title">
-        <span>Why ELåiVA</span>
-        <h2>AI + Automation + Human Support</h2>
-      </div>
-
-      <div class="featured-box">
-
-        <h3>Technology and people working together.</h3>
-
-        <p>
-          Δεν αντικαθιστούμε την ανθρώπινη επικοινωνία.
-          Τη βελτιώνουμε, συνδυάζοντας AI τεχνολογία με ανθρώπινη υποστήριξη.
-        </p>
-
-        <div class="support-columns">
-
-          <div class="support-box">
-            <h4>AI &amp; Automation</h4>
-            <ul>
-              <li>✓ Faster processes</li>
-              <li>✓ Automated repetitive tasks</li>
-              <li>✓ Better lead management</li>
-              <li>✓ 24/7 AI assistance</li>
-            </ul>
-          </div>
-
-          <div class="support-box">
-            <h4>Human Support</h4>
-            <ul>
-              <li>✓ Real human communication</li>
-              <li>✓ Customer service</li>
-              <li>✓ Email &amp; live chat</li>
-              <li>✓ Back office support</li>
-            </ul>
-          </div>
-
-        </div>
-
-        <div class="human-support-text">
-          <h3>Human customer support when your business needs it.</h3>
-          <p>
-            Παράλληλα με τις AI λύσεις μας, προσφέρουμε Human Customer Support για επιχειρήσεις που θέλουν να συνδυάσουν την τεχνολογία με την ανθρώπινη επικοινωνία.
-          </p>
-          <p>
-            Αναλαμβάνουμε την εξυπηρέτηση πελατών, τη διαχείριση εισερχόμενων αιτημάτων και την καθημερινή επικοινωνία με το κοινό σας.
-          </p>
-          <p>
-            Με την υπηρεσία μας, οι επιχειρήσεις μπορούν να έχουν σταθερή ανθρώπινη υποστήριξη χωρίς το κόστος μιας πλήρους πρόσληψης και διατήρησης επιπλέον προσωπικού.
-          </p>
-          <p>
-            Έτσι μειώνουν λειτουργικά και μισθολογικά έξοδα, ενώ παράλληλα διατηρούν υψηλό επίπεδο εξυπηρέτησης.
-          </p>
-          <p>
-            Περισσότερη υποστήριξη, μικρότερο κόστος, χωρίς την ανάγκη δημιουργίας ενός επιπλέον in-house τμήματος.
-          </p>
-          <a href="#contact" class="button">Talk to us</a>
-        </div>
-
-      </div>
-
-    </div>
-
-  </section>
-
-
-  <!-- DEMOS -->
-  
-<section class="seo-services" aria-label="ELåiVA digital services">
-  <div class="container">
-    <h2>Website Development, AI &amp; Business Automation</h2>
-    <p>
-      ELåiVA creates modern business websites, landing pages and AI-powered digital experiences,
-      combined with AI chatbots, workflow automation and customer support solutions for businesses in Greece.
-    </p>
-  </div>
-</section>
-<!-- ELaiVA SEO SERVICES -->
-
-<section id="demos">
-    <div class="container">
-      <div class="section-title">
-        <span>Our work</span>
-        <h2>AI Demos</h2>
-      </div>
-
-      <div class="demo">
-        <h3>LUNA BEAUTY STUDIO</h3>
-        <p>
-          Ένα AI Beauty Assistant σχεδιασμένο για beauty salons,
-          με booking, υπηρεσίες, ακυρώσεις και customer questions.
-        </p>
-        <a
-          href="https://luna-beauty-studio-flame.vercel.app/"
-          target="_blank"
-          class="button button-dark"
-        >
-          View live demo
-        </a>
-      </div>
-
-      <br><br>
-
-      <div class="demo">
-        <h3>MERMAIDS RESTAURANT &amp; WINE</h3>
-        <p>
-          AI Restaurant Digital Experience — complete restaurant website,
-          AI-powered assistant and integrated lead &amp; reservation management system.
-        </p>
-        <p>
-          <strong>AI Assistant • Reservations • Lead Management • Manager Dashboard</strong>
-        </p>
-        <a
-          href="https://papastergiouueodwra-hash.github.io/mermaids-restaurant-ai-assistant/"
-          target="_blank"
-          class="button button-dark"
-        >
-          View Demo →
-        </a>
-      </div>
-
-      <br><br>
-
-      <div class="demo">
-        <h3>⚡ ENERGY HOME</h3>
-        <p>
-          Energy &amp; Gas lead-generation demo with offers, quiz, calculator and AI energy assistant.
-        </p>
-        <a
-          href="https://energy-home-pearl.vercel.app/"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="button button-dark"
-        >
-          View Demo →
-        </a>
-      </div>
-    </div>
-  </section>
-
-
-  <!-- CONTACT -->
-  <section id="contact" class="contact">
-
-    <div class="contact-content">
-
-      <h2>READY TO MAKE YOUR BUSINESS SMARTER?</h2>
-
-      <p>
-        Θέλετε να δείτε πώς η AI και οι αυτοματισμοί μπορούν να βοηθήσουν την επιχείρησή σας;
-        Επικοινωνήστε μαζί μας.
-      </p>
-
-      <div class="contact-info">
-        <a href="tel:+306984059324">+30 698 405 9324</a>
-        <a href="tel:+306985692512">+30 698 569 2512</a>
-        <a href="tel:+306973679762">+30 697 367 9762</a>
-        <a href="mailto:info@elaiva.site">info@elaiva.site</a>
-      </div>
-
-    </div>
-
-  </section>
-
-
-  <!-- FOOTER -->
-  <footer>
-
-    <div class="footer-logo">
-      𝑬𝑳å𝒊𝑽𝑨 — 𝑻&𝑺 𝑪𝑶𝑴𝑷𝑨𝑵𝒀
-    </div>
-
-    <p>AI • Automation • Human Support</p>
-
-    <div class="footer-contact">
-      <a href="tel:+306984059324">+30 698 405 9324</a>
-      <a href="tel:+306985692512">+30 698 569 2512</a>
-      <a href="tel:+306973679762">+30 697 367 9762</a>
-      <a href="mailto:info@elaiva.site">info@elaiva.site</a>
-    </div>
-
-    <p>© 2026 ELåiVA — T&amp;S COMPANY. All rights reserved.</p>
-
-  </footer>
-
-
+  <header><div class="header-inner"><div class="logo">𝑬𝑳å𝒊𝑽𝑨 — 𝑻&𝑺 𝑪𝑶𝑴𝑷𝑨𝑵𝒀</div><button class="menu-button" onclick="toggleMenu()" aria-label="Open menu">☰</button><nav id="mainNav"><a href="#about" onclick="closeMenu()">About</a><a href="#services" onclick="closeMenu()">Services</a><a href="#packages" onclick="closeMenu()">Packages</a><a href="#demos" onclick="closeMenu()">Demos</a><a href="#contact" onclick="closeMenu()">Contact</a></nav></div></header>
+  <section class="hero"><div class="hero-content"><div class="hero-small">AI • Automation • Human Support</div><h1>Make your business smarter.</h1><div class="hero-brand">𝑬𝑳å𝒊𝑽𝑨 — 𝑻&𝑺 𝑪𝑶𝑴𝑷𝑨𝑵𝒀</div><p>AI solutions designed to make business smarter. We help businesses automate everyday processes, save time and improve efficiency.</p><div class="buttons"><a href="#contact" class="button button-dark">Book a consultation</a><a href="#services" class="button">Explore our services</a></div></div></section>
+  <section id="about"><div class="container"><div class="section-title"><span>About ELåiVA</span><h2>Technology that works for your business.</h2></div><div class="about-text"><p>Η ELåiVA — T&S COMPANY είναι μια σύγχρονη εταιρεία τεχνολογίας που αξιοποιεί τη δύναμη της Τεχνητής Νοημοσύνης (AI) για να βοηθά επιχειρήσεις να εξελίσσονται και να λειτουργούν πιο έξυπνα. Δημιουργούμε και εφαρμόζουμε λύσεις AI, αυτοματισμούς και ψηφιακά εργαλεία που μειώνουν τον χρόνο που απαιτούν οι καθημερινές εργασίες, βελτιώνουν την εξυπηρέτηση πελατών και βοηθούν τις επιχειρήσεις να λειτουργούν πιο αποτελεσματικά.</p></div></div></section>
+  <section id="services"><div class="container"><div class="section-title"><span>What we do</span><h2>AI &amp; Business Solutions</h2></div><div class="cards"><div class="card"><h3>AI Solutions</h3><p>AI εργαλεία σχεδιασμένα σύμφωνα με τις ανάγκες κάθε επιχείρησης.</p><ul><li>AI Chatbots</li><li>AI Assistants</li><li>FAQ Automation</li><li>AI Email Assistance</li><li>Lead Qualification</li></ul></div><div class="card"><h3>Business Automation</h3><p>Αυτοματοποιούμε επαναλαμβανόμενες διαδικασίες και εξοικονομούμε χρόνο.</p><ul><li>Automated Workflows</li><li>Customer Management</li><li>Lead Management</li><li>Internal Processes</li><li>Business Integrations</li></ul></div><div class="card"><h3>Digital Experiences</h3><p>Σύγχρονες ψηφιακές εμπειρίες που βοηθούν τις επιχειρήσεις να ξεχωρίζουν.</p><ul><li>Business Websites</li><li>AI-Powered Websites</li><li>Landing Pages</li><li>Digital Customer Journeys</li><li>Online Lead Generation</li></ul></div><div class="card"><h3>Human Customer Support</h3><p>Αναλαμβάνουμε την καθημερινή επικοινωνία με τους πελάτες σας.</p><ul><li>Email Support</li><li>Live Chat</li><li>Customer Service</li><li>Back Office</li><li>Incoming Requests</li></ul></div></div></div></section>
+  <section id="packages"><div class="container"><div class="section-title"><span>Our solutions</span><h2>Packages for modern businesses.</h2></div><div class="package-grid"><div class="package"><h3>AI Starter</h3><p>Για επιχειρήσεις που θέλουν να ξεκινήσουν με AI.</p><ul><li>AI Assistant</li><li>FAQ Automation</li><li>Basic Lead Capture</li><li>Basic Website Integration</li></ul></div><div class="package"><h3>Business Automation</h3><p>Για επιχειρήσεις που θέλουν να αυτοματοποιήσουν διαδικασίες.</p><ul><li>Automated Workflows</li><li>Lead Management</li><li>Customer Management</li><li>Business Integrations</li></ul></div><div class="package"><h3>AI Growth</h3><p>Για επιχειρήσεις που θέλουν ένα ολοκληρωμένο AI οικοσύστημα.</p><ul><li>Custom AI Solutions</li><li>Advanced Automation</li><li>Lead Qualification</li><li>Digital Customer Experience</li></ul></div><div class="package"><h3>Human Support</h3><p>Για επιχειρήσεις που χρειάζονται εξωτερική υποστήριξη πελατών.</p><ul><li>Email Support</li><li>Live Chat</li><li>Customer Service</li><li>Back Office</li></ul></div></div><p class="note">Κάθε λύση μπορεί να προσαρμοστεί ανάλογα με το μέγεθος, τις ανάγκες και τους στόχους της επιχείρησης.</p></div></section>
+  <section class="featured"><div class="container"><div class="section-title"><span>Why ELåiVA</span><h2>AI + Automation + Human Support</h2></div><div class="featured-box"><h3>Technology and people working together.</h3><p>Δεν αντικαθιστούμε την ανθρώπινη επικοινωνία. Τη βελτιώνουμε, συνδυάζοντας AI τεχνολογία με ανθρώπινη υποστήριξη.</p><div class="support-columns"><div class="support-box"><h4>AI &amp; Automation</h4><ul><li>✓ Faster processes</li><li>✓ Automated repetitive tasks</li><li>✓ Better lead management</li><li>✓ 24/7 AI assistance</li></ul></div><div class="support-box"><h4>Human Support</h4><ul><li>✓ Real human communication</li><li>✓ Customer service</li><li>✓ Email &amp; live chat</li><li>✓ Back office support</li></ul></div></div><div class="human-support-text"><h3>Human customer support when your business needs it.</h3><p>Παράλληλα με τις AI λύσεις μας, προσφέρουμε Human Customer Support για επιχειρήσεις που θέλουν να συνδυάσουν την τεχνολογία με την ανθρώπινη επικοινωνία.</p><p>Αναλαμβάνουμε την εξυπηρέτηση πελατών, τη διαχείριση εισερχόμενων αιτημάτων και την καθημερινή επικοινωνία με το κοινό σας.</p><p>Με την υπηρεσία μας, οι επιχειρήσεις μπορούν να έχουν σταθερή ανθρώπινη υποστήριξη χωρίς το κόστος μιας πλήρους πρόσληψης και διατήρησης επιπλέον προσωπικού.</p><p>Έτσι μειώνουν λειτουργικά και μισθολογικά έξοδα, ενώ παράλληλα διατηρούν υψηλό επίπεδο εξυπηρέτησης.</p><p>Περισσότερη υποστήριξη, μικρότερο κόστος, χωρίς την ανάγκη δημιουργίας ενός επιπλέον in-house τμήματος.</p><a href="#contact" class="button">Talk to us</a></div></div></div></section>
+  <section class="seo-services" aria-label="ELåiVA digital services"><div class="container"><h2>Website Development, AI &amp; Business Automation</h2><p>ELåiVA creates modern business websites, landing pages and AI-powered digital experiences, combined with AI chatbots, workflow automation and customer support solutions for businesses in Greece.</p></div></section>
+  <section id="demos"><div class="container"><div class="section-title"><span>Our work</span><h2>AI Demos</h2></div><div class="demo"><h3>LUNA BEAUTY STUDIO</h3><p>Ένα AI Beauty Assistant σχεδιασμένο για beauty salons, με booking, υπηρεσίες, ακυρώσεις και customer questions.</p><a href="https://luna-beauty-studio-flame.vercel.app/" target="_blank" class="button button-dark">View live demo</a></div><br><br><div class="demo"><h3>MERMAIDS RESTAURANT &amp; WINE</h3><p>AI Restaurant Digital Experience — complete restaurant website, AI-powered assistant and integrated lead &amp; reservation management system.</p><p><strong>AI Assistant • Reservations • Lead Management • Manager Dashboard</strong></p><a href="https://papastergiouueodwra-hash.github.io/mermaids-restaurant-ai-assistant/" target="_blank" class="button button-dark">View Demo →</a></div><br><br><div class="demo"><h3>⚡ ENERGY HOME</h3><p>Energy &amp; Gas lead-generation demo with offers, quiz, calculator and AI energy assistant.</p><a href="https://energy-home-pearl.vercel.app/" target="_blank" rel="noopener noreferrer" class="button button-dark">View Demo →</a></div></div></section>
+  <section id="contact" class="contact"><div class="contact-content"><h2>READY TO MAKE YOUR BUSINESS SMARTER?</h2><p>Θέλετε να δείτε πώς η AI και οι αυτοματισμοί μπορούν να βοηθήσουν την επιχείρησή σας; Επικοινωνήστε μαζί μας.</p><div class="contact-info"><a href="tel:+306984059324">+30 698 405 9324</a><a href="tel:+306985692512">+30 698 569 2512</a><a href="tel:+306973679762">+30 697 367 9762</a><a href="mailto:info@elaiva.site">info@elaiva.site</a></div></div></section>
+  <footer><div class="footer-logo">𝑬𝑳å𝒊𝑽𝑨 — 𝑻&𝑺 𝑪𝑶𝑴𝑷𝑨𝑵𝒀</div><p>AI • Automation • Human Support</p><div class="footer-contact"><a href="tel:+306984059324">+30 698 405 9324</a><a href="tel:+306985692512">+30 698 569 2512</a><a href="tel:+306973679762">+30 697 367 9762</a><a href="mailto:info@elaiva.site">info@elaiva.site</a></div><p>© 2026 ELåiVA — T&amp;S COMPANY. All rights reserved.</p></footer>
+  <button id="elaivaMeetingButton" type="button" aria-label="Book a meeting">Book a Meeting</button>
+  <div id="elaivaMeetingOverlay" aria-hidden="true"><div class="elaiva-meeting-modal" role="dialog" aria-modal="true" aria-labelledby="elaivaMeetingTitle"><button class="elaiva-meeting-close" id="elaivaMeetingClose" type="button" aria-label="Close">×</button><h2 id="elaivaMeetingTitle">Book a Meeting</h2><p>Tell us a little about your business and we will contact you.</p><form id="elaivaMeetingForm" class="elaiva-meeting-form"><label>Name<input type="text" name="name" autocomplete="name" required></label><label>Phone<input type="tel" name="phone" autocomplete="tel" required></label><label>Email<input type="email" name="email" autocomplete="email" required></label><label>Business name<input type="text" name="business_name" autocomplete="organization" required></label><label>Business sector<select name="sector" required><option value="" selected disabled>Select a sector</option><option value="Εστίαση">Εστίαση</option><option value="Ομορφιά">Ομορφιά</option><option value="Υγεία">Υγεία</option><option value="Λιανική">Λιανική</option><option value="Real Estate">Real Estate</option><option value="Τουρισμός">Τουρισμός</option><option value="Εκπαίδευση">Εκπαίδευση</option><option value="Υπηρεσίες">Υπηρεσίες</option><option value="Άλλο">Άλλο</option></select></label><button class="elaiva-meeting-submit" id="elaivaMeetingSubmit" type="submit">Request a Meeting</button><div id="elaivaMeetingMessage" aria-live="polite"></div></form></div></div>
   <script>
-    function toggleMenu() {
-      document.getElementById("mainNav").classList.toggle("active");
-    }
-
-    function closeMenu() {
-      document.getElementById("mainNav").classList.remove("active");
-    }
+    function toggleMenu(){document.getElementById("mainNav").classList.toggle("active")}
+    function closeMenu(){document.getElementById("mainNav").classList.remove("active")}
+    const elaivaMeetingButton=document.getElementById("elaivaMeetingButton");
+    const elaivaMeetingOverlay=document.getElementById("elaivaMeetingOverlay");
+    const elaivaMeetingClose=document.getElementById("elaivaMeetingClose");
+    const elaivaMeetingForm=document.getElementById("elaivaMeetingForm");
+    const elaivaMeetingSubmit=document.getElementById("elaivaMeetingSubmit");
+    const elaivaMeetingMessage=document.getElementById("elaivaMeetingMessage");
+    const packagesSection=document.getElementById("packages");
+    function openElaivaMeeting(){elaivaMeetingButton.classList.remove("visible");elaivaMeetingOverlay.classList.add("open");elaivaMeetingOverlay.setAttribute("aria-hidden","false");document.body.style.overflow="hidden";setTimeout(()=>{const firstField=elaivaMeetingForm.querySelector("input");if(firstField)firstField.focus()},50)}
+    function closeElaivaMeeting(){elaivaMeetingOverlay.classList.remove("open");elaivaMeetingOverlay.setAttribute("aria-hidden","true");document.body.style.overflow=""}
+    elaivaMeetingButton.addEventListener("click",openElaivaMeeting);elaivaMeetingClose.addEventListener("click",closeElaivaMeeting);
+    elaivaMeetingOverlay.addEventListener("click",event=>{if(event.target===elaivaMeetingOverlay)closeElaivaMeeting()});
+    document.addEventListener("keydown",event=>{if(event.key==="Escape"&&elaivaMeetingOverlay.classList.contains("open"))closeElaivaMeeting()});
+    const packagesObserver=new IntersectionObserver(entries=>{if(entries.some(entry=>entry.isIntersecting)){elaivaMeetingButton.classList.add("visible");packagesObserver.disconnect()}},{threshold:.15});
+    packagesObserver.observe(packagesSection);
+    elaivaMeetingForm.addEventListener("submit",async event=>{event.preventDefault();elaivaMeetingSubmit.disabled=true;elaivaMeetingSubmit.textContent="Sending...";elaivaMeetingMessage.textContent="";elaivaMeetingMessage.className="";const formData=new FormData(elaivaMeetingForm);const lead={name:String(formData.get("name")||"").trim(),phone:String(formData.get("phone")||"").trim(),email:String(formData.get("email")||"").trim(),business_name:String(formData.get("business_name")||"").trim(),sector:String(formData.get("sector")||"").trim()};try{const response=await fetch("https://elaiva-leads-api.vercel.app/api/leads",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(lead)});const result=await response.json();if(!response.ok||!result.success)throw new Error(result.error||"Lead submission failed.");elaivaMeetingMessage.textContent="Thank you! Your meeting request has been received.";elaivaMeetingMessage.className="success";elaivaMeetingForm.reset();elaivaMeetingSubmit.textContent="Request Sent ✓"}catch(error){console.error("ELåiVA lead submission failed:",error);elaivaMeetingMessage.textContent="Something went wrong. Please try again or contact us directly.";elaivaMeetingMessage.className="error";elaivaMeetingSubmit.disabled=false;elaivaMeetingSubmit.textContent="Request a Meeting"}});
   </script>
-
 </body>
 </html>
