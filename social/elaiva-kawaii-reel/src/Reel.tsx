@@ -40,18 +40,17 @@ function Sandwich(){return <div style={{position:'absolute',right:-72,top:120,wi
 </div>}
 
 function Kawaii({x,y,scale=1,rotation=0,face='happy',sweat=false,coffee=false,sandwich=false,walkPhase=0,mouthOpen=false,armsAround=false,bodyColor=CREAM,humanSteps=false}:KawaiiProps){
-  // Keep the original walking animation untouched unless this is one of the dance characters.
   const originalLegA = Math.sin(walkPhase)*18;
   const originalLegB = -originalLegA;
 
-  // Dance gait: one foot steps while the other supports the body, then they alternate.
+  // Only the dancers use this gait. One foot stays planted while the other makes a small step forward, then they swap.
   const gait = Math.sin(walkPhase);
-  const gaitA = humanSteps ? gait*22 : originalLegA;
-  const gaitB = humanSteps ? -gait*22 : originalLegB;
-  const liftA = humanSteps ? Math.max(0,-gait)*18 : 0;
-  const liftB = humanSteps ? Math.max(0,gait)*18 : 0;
-  const footXA = humanSteps ? gait*24 : 0;
-  const footXB = humanSteps ? -gait*24 : 0;
+  const gaitA = humanSteps ? gait*10 : originalLegA;
+  const gaitB = humanSteps ? -gait*10 : originalLegB;
+  const liftA = humanSteps ? Math.max(0,-gait)*7 : 0;
+  const liftB = humanSteps ? Math.max(0,gait)*7 : 0;
+  const footXA = humanSteps ? gait*16 : 0;
+  const footXB = humanSteps ? -gait*16 : 0;
 
   return <div style={{position:'absolute',left:x,top:y,transform:`translate(-50%,-50%) scale(${scale}) rotate(${rotation}deg)`,width:250,height:310,zIndex:2,perspective:600}}>
     <Ear side="left" bodyColor={bodyColor}/><Ear side="right" bodyColor={bodyColor}/>
@@ -103,7 +102,7 @@ export default function Reel(){
  const squish=interpolate(f,[108,120,135],[1,1.18,1],{extrapolateLeft:'clamp',extrapolateRight:'clamp'});
  const dragX=interpolate(f,[135,180,250],[540,700,1210],{extrapolateLeft:'clamp',extrapolateRight:'clamp'});
 
- // Dance only: straight horizontal path, no hopping/rotation, with slow alternating small steps.
+ // Dance only: straight horizontal path, no hopping/rotation, with small alternating steps.
  const danceT=f-250;
  const danceProgress=Math.max(0,Math.min(1,danceT/240));
  const danceTravel=760*danceProgress;
@@ -113,7 +112,8 @@ export default function Reel(){
  const newsIn=interpolate(f,[490,510],[0,1],{extrapolateLeft:'clamp',extrapolateRight:'clamp'});
  const finalStart=610;
  const finalProgress=Math.max(0,Math.min(1,(f-finalStart)/135));
- const finalX=interpolate(f,[610,680,745],[600,540,1200],{extrapolateLeft:'clamp',extrapolateRight:'clamp'});
+ // Keep the final character on-screen through the ending second instead of leaving to the right.
+ const finalX=interpolate(f,[610,680,745,780],[600,540,700,700],{extrapolateLeft:'clamp',extrapolateRight:'clamp'});
  const finalScale=interpolate(f,[610,680,745],[0.18,0.92,0.92],{extrapolateLeft:'clamp',extrapolateRight:'clamp'});
  const finalY=interpolate(f,[610,680],[1040,1120],{extrapolateLeft:'clamp',extrapolateRight:'clamp'});
  const mouthOpen=Math.floor((f-620)/5)%2===0 && f<730;
