@@ -43,7 +43,7 @@ function Kawaii({x,y,scale=1,rotation=0,face='happy',sweat=false,coffee=false,sa
   const originalLegA = Math.sin(walkPhase)*18;
   const originalLegB = -originalLegA;
 
-  // Only the dancers use this gait. One foot stays planted while the other makes a small step forward, then they swap.
+  // Only the dancers/explicit walking moments use this small alternating-step gait.
   const gait = Math.sin(walkPhase);
   const gaitA = humanSteps ? gait*10 : originalLegA;
   const gaitB = humanSteps ? -gait*10 : originalLegB;
@@ -112,7 +112,6 @@ export default function Reel(){
  const newsIn=interpolate(f,[490,510],[0,1],{extrapolateLeft:'clamp',extrapolateRight:'clamp'});
  const finalStart=610;
  const finalProgress=Math.max(0,Math.min(1,(f-finalStart)/135));
- // Keep the final character on-screen through the ending second instead of leaving to the right.
  const finalX=interpolate(f,[610,680,745,780],[600,540,700,700],{extrapolateLeft:'clamp',extrapolateRight:'clamp'});
  const finalScale=interpolate(f,[610,680,745],[0.18,0.92,0.92],{extrapolateLeft:'clamp',extrapolateRight:'clamp'});
  const finalY=interpolate(f,[610,680],[1040,1120],{extrapolateLeft:'clamp',extrapolateRight:'clamp'});
@@ -126,7 +125,7 @@ export default function Reel(){
 
  return <Scene><AbsoluteFill style={{background:bg}}>
   {sec<8.33&&<>
-    <Kawaii x={introX} y={1110} scale={.82+.06*Math.sin(f/8)} face={f<110?'surprised':'squished'} sweat={f>=120&&f<250}/>
+    <Kawaii x={introX} y={1110} scale={.82+.06*Math.sin(f/8)} face={f<110?'surprised':'squished'} sweat={f>=120&&f<250} walkPhase={f/9} humanSteps/>
     {f>=92&&f<135&&<ElaivaBlock x={540} y={dropY} rotation={interpolate(f,[92,108,120],[0,0,3],{extrapolateLeft:'clamp',extrapolateRight:'clamp'})} scale={squish} crushed/>}
     {f>=120&&f<250&&<><ElaivaBlock x={interpolate(f,[120,135,250],[540,540,1130],{extrapolateLeft:'clamp',extrapolateRight:'clamp'})} y={1050} rotation={interpolate(f,[120,180,250],[0,-5,7],{extrapolateLeft:'clamp',extrapolateRight:'clamp'})}/><Kawaii x={dragX-80} y={1160} scale={.82} rotation={interpolate(f,[135,190,250],[0,-9,5],{extrapolateLeft:'clamp',extrapolateRight:'clamp'})} face="squished" sweat/></>}
   </>}
