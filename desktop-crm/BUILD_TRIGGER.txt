@@ -1,3 +1,4 @@
 Trigger Windows installer build for ELåiVA CRM.
 Build requested.
 Fix dependency placement.
+Build requested again.
