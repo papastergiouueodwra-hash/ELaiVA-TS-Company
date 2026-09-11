@@ -4,10 +4,6 @@ on:
   push:
     branches:
       - main
-    paths:
-      - 'crm.html'
-      - 'desktop-crm/**'
-      - '.github/workflows/build-crm-installer.yml'
   workflow_dispatch:
 
 permissions:
