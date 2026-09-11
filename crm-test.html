@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="el">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ELåiVA CRM Connection Test</title>
+<style>
+body{font-family:Arial,sans-serif;background:#f6f2ef;color:#292426;display:flex;align-items:center;justify-content:center;min-height:100vh;margin:0}.box{background:#fff;padding:28px;border-radius:16px;width:min(520px,90%);box-shadow:0 10px 30px #30252a12}h1{font-family:Georgia,serif}input{width:100%;box-sizing:border-box;padding:12px;border:1px solid #e7dfe0;border-radius:9px;margin:10px 0 14px}button{border:0;border-radius:9px;padding:11px 16px;background:#8d6673;color:#fff;cursor:pointer}#result{margin-top:18px;padding:14px;border-radius:9px;background:#f1e8eb;white-space:pre-wrap;word-break:break-word}
+</style>
+</head>
+<body>
+<div class="box">
+<h1>ELåiVA CRM</h1>
+<p>Έλεγχος σύνδεσης CRM API.</p>
+<label>CRM API key</label>
+<input id="key" type="password" autocomplete="off" placeholder="Βάλε το CRM API key">
+<button id="test">Έλεγχος σύνδεσης</button>
+<div id="result">Δεν έχει γίνει έλεγχος.</div>
+</div>
+<script>
+const API='https://elaiva-leads-api.vercel.app/api/crm/leads';
+const result=document.getElementById('result');
+document.getElementById('test').onclick=async()=>{
+ const key=document.getElementById('key').value.trim();
+ if(!key){result.textContent='Βάλε πρώτα το CRM API key.';return}
+ result.textContent='Έλεγχος...';
+ try{
+  const r=await fetch(API,{headers:{'X-CRM-Key':key}});
+  const data=await r.json();
+  result.textContent='HTTP '+r.status+'\n'+JSON.stringify(data,null,2);
+ }catch(e){result.textContent='Σφάλμα σύνδεσης: '+e.message}
+};
+</script>
+</body>
+</html>
