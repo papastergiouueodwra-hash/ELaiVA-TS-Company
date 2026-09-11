@@ -1,0 +1,325 @@
+name: Add ELåiVA lead widget
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  patch-site:
+    if: github.event.head_commit.message != 'Add ELåiVA Book a Meeting widget'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Add lead widget without changing existing site content
+        run: |
+          python3 <<'PY'
+          from pathlib import Path
+
+          path = Path('index.html')
+          text = path.read_text(encoding='utf-8')
+
+          css_marker = '    /* MOBILE */'
+          css = r'''
+    /* ELåiVA BOOK A MEETING LEAD WIDGET */
+    #elaiva-book-meeting-trigger {
+      position: fixed;
+      left: 0;
+      top: 58%;
+      transform: translateY(-50%);
+      z-index: 2500;
+      display: none;
+      padding: 16px 12px;
+      background: #222;
+      color: white;
+      border: 1px solid #444;
+      border-left: none;
+      border-radius: 0 14px 14px 0;
+      writing-mode: vertical-rl;
+      text-orientation: mixed;
+      font-size: 13px;
+      font-weight: bold;
+      letter-spacing: 1.2px;
+      cursor: pointer;
+      box-shadow: 0 8px 25px rgba(0,0,0,.18);
+      transition: all .25s ease;
+    }
+
+    #elaiva-book-meeting-trigger:hover {
+      padding-left: 16px;
+      padding-right: 16px;
+      background: #111;
+    }
+
+    #elaiva-lead-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 3000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      background: rgba(0,0,0,.58);
+      backdrop-filter: blur(5px);
+    }
+
+    #elaiva-lead-modal {
+      position: relative;
+      width: min(520px, 100%);
+      max-height: 92vh;
+      overflow-y: auto;
+      background: #f8f7f4;
+      color: #222;
+      border: 1px solid #ddd;
+      border-radius: 22px;
+      padding: 38px;
+      box-shadow: 0 25px 70px rgba(0,0,0,.25);
+    }
+
+    #elaiva-lead-modal h2 {
+      margin-bottom: 8px;
+      font-size: 30px;
+    }
+
+    #elaiva-lead-modal .elaiva-lead-subtitle {
+      color: #666;
+      margin-bottom: 25px;
+    }
+
+    .elaiva-lead-field {
+      margin-bottom: 15px;
+    }
+
+    .elaiva-lead-field label {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 13px;
+      font-weight: bold;
+    }
+
+    .elaiva-lead-field input,
+    .elaiva-lead-field select {
+      width: 100%;
+      padding: 13px 14px;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      background: white;
+      color: #222;
+      font: inherit;
+      outline: none;
+    }
+
+    .elaiva-lead-field input:focus,
+    .elaiva-lead-field select:focus {
+      border-color: #222;
+    }
+
+    #elaiva-lead-submit {
+      width: 100%;
+      margin-top: 8px;
+      padding: 14px 20px;
+      border: 1px solid #222;
+      border-radius: 30px;
+      background: #222;
+      color: white;
+      font: inherit;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    #elaiva-lead-submit:hover {
+      background: #111;
+    }
+
+    #elaiva-lead-close {
+      position: absolute;
+      top: 14px;
+      right: 16px;
+      width: 36px;
+      height: 36px;
+      border: 0;
+      border-radius: 50%;
+      background: transparent;
+      color: #555;
+      font-size: 25px;
+      cursor: pointer;
+    }
+
+    #elaiva-lead-success {
+      display: none;
+      text-align: center;
+      padding: 25px 5px 5px;
+    }
+
+    @media (max-width: 768px) {
+      #elaiva-book-meeting-trigger {
+        top: auto;
+        bottom: 24px;
+        transform: none;
+        padding: 13px 15px;
+        writing-mode: horizontal-tb;
+        border-left: 1px solid #444;
+        border-radius: 0 14px 14px 0;
+        font-size: 12px;
+      }
+
+      #elaiva-lead-modal {
+        padding: 30px 22px;
+      }
+    }
+
+'''
+
+          if 'id="elaiva-book-meeting-trigger"' not in text:
+              text = text.replace(css_marker, css + css_marker, 1)
+
+          body_marker = '  <!-- FOOTER -->'
+          html = r'''
+  <!-- ELåiVA BOOK A MEETING -->
+  <button id="elaiva-book-meeting-trigger" type="button" aria-label="Book a Meeting">
+    Book a Meeting
+  </button>
+
+  <div id="elaiva-lead-overlay" role="dialog" aria-modal="true" aria-labelledby="elaiva-lead-title">
+    <div id="elaiva-lead-modal">
+      <button id="elaiva-lead-close" type="button" aria-label="Close">×</button>
+
+      <div id="elaiva-lead-form-wrap">
+        <h2 id="elaiva-lead-title">Book a Meeting</h2>
+        <p class="elaiva-lead-subtitle">Tell us a little about your business and we will get in touch.</p>
+
+        <form id="elaiva-lead-form">
+          <div class="elaiva-lead-field">
+            <label for="elaiva-lead-name">Name *</label>
+            <input id="elaiva-lead-name" name="name" type="text" required autocomplete="name">
+          </div>
+
+          <div class="elaiva-lead-field">
+            <label for="elaiva-lead-phone">Phone *</label>
+            <input id="elaiva-lead-phone" name="phone" type="tel" required autocomplete="tel">
+          </div>
+
+          <div class="elaiva-lead-field">
+            <label for="elaiva-lead-email">Email *</label>
+            <input id="elaiva-lead-email" name="email" type="email" required autocomplete="email">
+          </div>
+
+          <div class="elaiva-lead-field">
+            <label for="elaiva-lead-business">Business name *</label>
+            <input id="elaiva-lead-business" name="business" type="text" required autocomplete="organization">
+          </div>
+
+          <div class="elaiva-lead-field">
+            <label for="elaiva-lead-sector">Business sector</label>
+            <select id="elaiva-lead-sector" name="sector">
+              <option value="">Select sector</option>
+              <option>Εστίαση</option>
+              <option>Ομορφιά</option>
+              <option>Υγεία</option>
+              <option>Λιανική</option>
+              <option>Real Estate</option>
+              <option>Τουρισμός</option>
+              <option>Εκπαίδευση</option>
+              <option>Υπηρεσίες</option>
+              <option>Άλλο</option>
+            </select>
+          </div>
+
+          <button id="elaiva-lead-submit" type="submit">Request a Meeting</button>
+        </form>
+      </div>
+
+      <div id="elaiva-lead-success">
+        <h2>Thank you!</h2>
+        <p class="elaiva-lead-subtitle">Your request has been received. We will contact you soon.</p>
+      </div>
+    </div>
+  </div>
+
+'''
+
+          if 'id="elaiva-lead-overlay"' not in text:
+              text = text.replace(body_marker, html + body_marker, 1)
+
+          script_marker = '  <script>\n    function toggleMenu()'
+          script_add = r'''  <script>
+    /* ELåiVA Book a Meeting trigger */
+    (function () {
+      const trigger = document.getElementById('elaiva-book-meeting-trigger');
+      const overlay = document.getElementById('elaiva-lead-overlay');
+      const close = document.getElementById('elaiva-lead-close');
+      const form = document.getElementById('elaiva-lead-form');
+      const formWrap = document.getElementById('elaiva-lead-form-wrap');
+      const success = document.getElementById('elaiva-lead-success');
+      const packages = document.getElementById('packages');
+
+      if (!trigger || !overlay || !packages) return;
+
+      let triggered = false;
+
+      function openLeadModal() {
+        overlay.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+      }
+
+      function closeLeadModal() {
+        overlay.style.display = 'none';
+        document.body.style.overflow = '';
+      }
+
+      const observer = new IntersectionObserver(function (entries) {
+        if (entries[0].isIntersecting || window.scrollY > packages.offsetTop) {
+          if (!triggered) {
+            triggered = true;
+            trigger.style.display = 'block';
+          }
+        }
+      }, { threshold: 0.05 });
+
+      observer.observe(packages);
+
+      trigger.addEventListener('click', openLeadModal);
+      close.addEventListener('click', closeLeadModal);
+
+      overlay.addEventListener('click', function (event) {
+        if (event.target === overlay) closeLeadModal();
+      });
+
+      document.addEventListener('keydown', function (event) {
+        if (event.key === 'Escape' && overlay.style.display === 'flex') {
+          closeLeadModal();
+        }
+      });
+
+      form.addEventListener('submit', function (event) {
+        event.preventDefault();
+
+        /*
+         * The form UI is ready.
+         * The secure backend/CRM endpoint will be connected next.
+         * No customer data is stored in the public website at this stage.
+         */
+        formWrap.style.display = 'none';
+        success.style.display = 'block';
+      });
+    })();
+
+    function toggleMenu()'''
+
+          if "ELåiVA Book a Meeting trigger" not in text:
+              text = text.replace(script_marker, script_add, 1)
+
+          path.write_text(text, encoding='utf-8')
+          PY
+
+      - name: Commit patched site
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          git diff --cached --quiet && exit 0
+          git commit -m "Add ELåiVA Book a Meeting widget"
+          git push
