@@ -12,6 +12,7 @@ type KawaiiProps = {
   face?:'happy'|'surprised'|'squished'; sweat?:boolean;
   coffee?:boolean; sandwich?:boolean; walkPhase?:number;
   mouthOpen?:boolean; armsAround?:boolean; bodyColor?:string;
+  humanSteps?:boolean;
 };
 
 function Ear({side, bodyColor=CREAM}:{side:'left'|'right';bodyColor?:string}) {
@@ -38,9 +39,15 @@ function Sandwich(){return <div style={{position:'absolute',right:-72,top:120,wi
   <div style={{position:'absolute',left:3,top:40,width:68,height:13,background:'#e8b3a0',border:'3px solid #9b6d42',borderRadius:'4px 4px 10px 10px'}}/>
 </div>}
 
-function Kawaii({x,y,scale=1,rotation=0,face='happy',sweat=false,coffee=false,sandwich=false,walkPhase=0,mouthOpen=false,armsAround=false,bodyColor=CREAM}:KawaiiProps){
-  const legA = Math.sin(walkPhase)*18;
-  const legB = -legA;
+function Kawaii({x,y,scale=1,rotation=0,face='happy',sweat=false,coffee=false,sandwich=false,walkPhase=0,mouthOpen=false,armsAround=false,bodyColor=CREAM,humanSteps=false}:KawaiiProps){
+  const step = Math.sin(walkPhase);
+  const stepOpposite = -step;
+  const liftA = humanSteps ? Math.max(0,-step) * 13 : 0;
+  const liftB = humanSteps ? Math.max(0,-stepOpposite) * 13 : 0;
+  const legA = step*18;
+  const legB = stepOpposite*18;
+  const footXA = humanSteps ? step*20 : 0;
+  const footXB = humanSteps ? stepOpposite*20 : 0;
   return <div style={{position:'absolute',left:x,top:y,transform:`translate(-50%,-50%) scale(${scale}) rotate(${rotation}deg)`,width:250,height:310,zIndex:2,perspective:600}}>
     <Ear side="left" bodyColor={bodyColor}/><Ear side="right" bodyColor={bodyColor}/>
     <div style={{position:'absolute',left:20,top:38,width:210,height:205,
@@ -61,10 +68,10 @@ function Kawaii({x,y,scale=1,rotation=0,face='happy',sweat=false,coffee=false,sa
     <div style={{position:'absolute',left:-5,top:166,width:25,height:25,background:bodyColor,border:'4px solid #eadfd6',borderRadius:'50%',zIndex:5}}/>
     <div style={{position:'absolute',right:-5,top:166,width:25,height:25,background:bodyColor,border:'4px solid #eadfd6',borderRadius:'50%',zIndex:5}}/>
 
-    <div style={{position:'absolute',left:73,top:229,width:30,height:62,background:`linear-gradient(90deg,#fff,${bodyColor})`,border:'4px solid #eadfd6',borderRadius:20,transform:`rotate(${4+legA}deg)`,transformOrigin:'top center',zIndex:0}}/>
-    <div style={{position:'absolute',right:73,top:229,width:30,height:62,background:`linear-gradient(90deg,#fff,${bodyColor})`,border:'4px solid #eadfd6',borderRadius:20,transform:`rotate(${-4+legB}deg)`,transformOrigin:'top center',zIndex:0}}/>
-    <div style={{position:'absolute',left:53,top:276,width:63,height:26,background:'#8b6b5b',borderRadius:'50%',transform:`rotate(${legA/2}deg)`,zIndex:0}}/>
-    <div style={{position:'absolute',right:53,top:276,width:63,height:26,background:'#8b6b5b',borderRadius:'50%',transform:`rotate(${legB/2}deg)`,zIndex:0}}/>
+    <div style={{position:'absolute',left:73,top:229,width:30,height:62,background:`linear-gradient(90deg,#fff,${bodyColor})`,border:'4px solid #eadfd6',borderRadius:20,transform:`translate(${footXA}px,${-liftA}px) rotate(${4+legA}deg)`,transformOrigin:'top center',zIndex:0}}/>
+    <div style={{position:'absolute',right:73,top:229,width:30,height:62,background:`linear-gradient(90deg,#fff,${bodyColor})`,border:'4px solid #eadfd6',borderRadius:20,transform:`translate(${footXB}px,${-liftB}px) rotate(${-4+legB}deg)`,transformOrigin:'top center',zIndex:0}}/>
+    <div style={{position:'absolute',left:53,top:276,width:63,height:26,background:'#8b6b5b',borderRadius:'50%',transform:`translate(${footXA}px,${-liftA}px) rotate(${legA/2}deg)`,zIndex:0}}/>
+    <div style={{position:'absolute',right:53,top:276,width:63,height:26,background:'#8b6b5b',borderRadius:'50%',transform:`translate(${footXB}px,${-liftB}px) rotate(${legB/2}deg)`,zIndex:0}}/>
 
     {sweat&&<><div style={{position:'absolute',right:25,top:76,fontSize:28,zIndex:6}}>💦</div><div style={{position:'absolute',right:0,top:105,fontSize:20,zIndex:6}}>💦</div></>}
     {coffee&&<Coffee/>}{sandwich&&<Sandwich/>}
@@ -94,7 +101,7 @@ export default function Reel(){
  const danceT=f-250;
  const danceProgress=Math.max(0,Math.min(1,danceT/240));
  const danceTravel=760*danceProgress;
- const danceStep=(danceT/45)*Math.PI*2;
+ const danceStep=(danceT/60)*Math.PI*2;
  const dancers=[0,1,2,3].map(i=>({x:920-danceTravel-i*185,y:1060+35*Math.sin(danceStep+i*Math.PI),r:6*Math.sin(danceStep+i*Math.PI),phase:danceStep+i*Math.PI}));
 
  const newsIn=interpolate(f,[490,510],[0,1],{extrapolateLeft:'clamp',extrapolateRight:'clamp'});
@@ -120,7 +127,7 @@ export default function Reel(){
 
   {sec>=8.33&&sec<16.33&&<>
     <div style={{position:'absolute',inset:0,display:'grid',placeItems:'center',fontSize:130,fontWeight:900,color:BROWN,opacity:.10}}>ELåiVA</div>
-    {dancers.map((d,i)=>{const next=dancers[(i+1)%4]; const lift=Math.max(0,Math.cos(d.phase)); return <React.Fragment key={i}><Kawaii x={d.x} y={d.y-lift*18} scale={i===0?.70:.64} rotation={d.r} armsAround walkPhase={d.phase} bodyColor={['#fffaf2','#f7d34b','#9edcff','#9ad66f'][i]}/><LinkArms x1={d.x+(next.x-d.x)*.12} y1={d.y+(next.y-d.y)*.12-15} x2={next.x-(next.x-d.x)*.12} y2={next.y-(next.y-d.y)*.12-15}/></React.Fragment>})}
+    {dancers.map((d,i)=>{const next=dancers[(i+1)%4]; const lift=Math.max(0,Math.cos(d.phase)); return <React.Fragment key={i}><Kawaii x={d.x} y={d.y-lift*18} scale={i===0?.70:.64} rotation={d.r} armsAround walkPhase={d.phase} humanSteps bodyColor={['#fffaf2','#f7d34b','#9edcff','#9ad66f'][i]}/><LinkArms x1={d.x+(next.x-d.x)*.12} y1={d.y+(next.y-d.y)*.12-15} x2={next.x-(next.x-d.x)*.12} y2={next.y-(next.y-d.y)*.12-15}/></React.Fragment>})}
     <div style={{position:'absolute',left:0,right:0,top:250,textAlign:'center',fontSize:38,fontWeight:900,color:BROWN}}>✨ ELåiVA DANCE BREAK ✨</div>
   </>}
 
