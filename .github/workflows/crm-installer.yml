@@ -1,0 +1,40 @@
+name: ELåiVA CRM Installer
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  ELECTRON_CACHE: ${{ github.workspace }}/.electron-cache
+  ELECTRON_BUILDER_CACHE: ${{ github.workspace }}/.electron-builder-cache
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Copy current CRM
+        shell: pwsh
+        run: Copy-Item -Path 'crm.html' -Destination 'desktop-crm\crm.html' -Force
+
+      - name: Install dependencies
+        working-directory: desktop-crm
+        run: npm install
+
+      - name: Build installer
+        working-directory: desktop-crm
+        run: npm run build
+
+      - name: Upload installer
+        uses: actions/upload-artifact@v4
+        with:
+          name: ELåiVA-CRM-Windows-Installer
+          path: 'desktop-crm/dist/ELåiVA CRM Setup.exe'
+          if-no-files-found: error
