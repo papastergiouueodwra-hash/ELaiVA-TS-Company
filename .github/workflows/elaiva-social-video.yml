@@ -1,0 +1,40 @@
+name: Render ELåiVA Social Launch Video
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'social/elaiva-launch/**'
+      - '.github/workflows/elaiva-social-video.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install renderer dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg
+          python -m pip install --upgrade pip pillow
+
+      - name: Render vertical launch video
+        run: python social/elaiva-launch/render_promo.py
+
+      - name: Upload MP4 artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ELaiVA-Instagram-TikTok-Launch
+          path: social/elaiva-launch/ELaiVA_launch.mp4
+          retention-days: 30
