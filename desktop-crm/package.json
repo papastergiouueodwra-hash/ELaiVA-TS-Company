@@ -1,0 +1,46 @@
+{
+  "name": "elaiva-crm-desktop",
+  "version": "1.0.0",
+  "description": "ELåiVA CRM desktop application",
+  "private": true,
+  "main": "main.cjs",
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-builder --win nsis"
+  },
+  "dependencies": {
+    "electron": "^38.1.2"
+  },
+  "devDependencies": {
+    "electron-builder": "^26.0.12"
+  },
+  "build": {
+    "appId": "site.elaiva.crm",
+    "productName": "ELåiVA CRM",
+    "artifactName": "ELåiVA CRM Setup.exe",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "main.cjs",
+      "crm.html"
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": ["x64"]
+        }
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "ELåiVA CRM",
+      "deleteAppDataOnUninstall": false
+    }
+  }
+}
