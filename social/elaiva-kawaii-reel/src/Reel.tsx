@@ -103,11 +103,12 @@ export default function Reel(){
  const squish=interpolate(f,[108,120,135],[1,1.18,1],{extrapolateLeft:'clamp',extrapolateRight:'clamp'});
  const dragX=interpolate(f,[135,180,250],[540,700,1210],{extrapolateLeft:'clamp',extrapolateRight:'clamp'});
 
+ // Dance only: straight horizontal path, no hopping/rotation, with slow alternating small steps.
  const danceT=f-250;
  const danceProgress=Math.max(0,Math.min(1,danceT/240));
  const danceTravel=760*danceProgress;
- const danceStep=(danceT/60)*Math.PI*2;
- const dancers=[0,1,2,3].map(i=>({x:920-danceTravel-i*185,y:1060+35*Math.sin(danceStep+i*Math.PI),r:6*Math.sin(danceStep+i*Math.PI),phase:danceStep+i*Math.PI}));
+ const danceStep=(danceT/72)*Math.PI*2;
+ const dancers=[0,1,2,3].map(i=>({x:920-danceTravel-i*185,y:1060,r:0,phase:danceStep+i*Math.PI}));
 
  const newsIn=interpolate(f,[490,510],[0,1],{extrapolateLeft:'clamp',extrapolateRight:'clamp'});
  const finalStart=610;
@@ -133,7 +134,7 @@ export default function Reel(){
   {sec>=8.33&&sec<16.33&&<>
     <div style={{position:'absolute',inset:0,display:'grid',placeItems:'center',fontSize:130,fontWeight:900,color:BROWN,opacity:.10}}>ELåiVA</div>
     {dancers.map((d,i)=><React.Fragment key={i}>
-      <Kawaii x={d.x} y={d.y-Math.max(0,Math.cos(d.phase))*18} scale={i===0?.70:.64} rotation={d.r} armsAround walkPhase={d.phase} humanSteps bodyColor={['#fffaf2','#f7d34b','#9edcff','#9ad66f'][i]}/>
+      <Kawaii x={d.x} y={d.y} scale={i===0?.70:.64} rotation={d.r} armsAround walkPhase={d.phase} humanSteps bodyColor={['#fffaf2','#f7d34b','#9edcff','#9ad66f'][i]}/>
       {i<3&&<LinkArms x1={d.x+(dancers[i+1].x-d.x)*.12} y1={d.y+(dancers[i+1].y-d.y)*.12-15} x2={dancers[i+1].x-(dancers[i+1].x-d.x)*.12} y2={dancers[i+1].y-(dancers[i+1].y-d.y)*.12-15}/>} 
     </React.Fragment>)}
     <div style={{position:'absolute',left:0,right:0,top:250,textAlign:'center',fontSize:38,fontWeight:900,color:BROWN}}>✨ ELåiVA DANCE BREAK ✨</div>
