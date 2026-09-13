@@ -1,0 +1,31 @@
+name: Fix ELaiVA SEO canonical
+on:
+  push:
+    paths:
+      - '.github/workflows/fix-seo.yml'
+permissions:
+  contents: write
+jobs:
+  fix:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Fix canonical URLs and add site metadata
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p = Path('index.html')
+          s = p.read_text(encoding='utf-8')
+          old = 'https://papastergiouueodwra-hash.github.io/ELaiVA-TS-Company/'
+          s = s.replace(old, 'https://elaiva.site/')
+          marker = '<meta property="og:url" content="https://elaiva.site/">'
+          schema = '''\n  <meta property="og:site_name" content="ELåiVA — T&S COMPANY">\n  <script type="application/ld+json">\n  {\n    "@context":"https://schema.org",\n    "@type":"WebSite",\n    "name":"ELåiVA — T&S COMPANY",\n    "alternateName":"ELåiVA",\n    "url":"https://elaiva.site/"\n  }\n  </script>\n'''
+          if '"@type":"WebSite"' not in s:
+              s = s.replace(marker, marker + schema)
+          p.write_text(s, encoding='utf-8')
+          PY
+          git config user.name 'ELaiVA SEO Bot'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add index.html
+          git diff --cached --quiet || git commit -m 'Fix ELaiVA canonical URL and site metadata'
+          git push
