@@ -87,7 +87,55 @@
     "url":"https://elaiva.site/"
   }
   </script>
-
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('consent','default',{
+      analytics_storage:'denied',
+      ad_storage:'denied',
+      ad_user_data:'denied',
+      ad_personalization:'denied'
+    });
+    (function(){
+      var key='elaiva_cookie_consent';
+      var saved=localStorage.getItem(key);
+      function loadGoogle(){
+        if(window.elaivaGoogleLoaded)return;
+        window.elaivaGoogleLoaded=true;
+        var s=document.createElement('script');
+        s.async=true;
+        s.src='https://www.googletagmanager.com/gtag/js?id=G-D6Y313B0HW';
+        document.head.appendChild(s);
+        gtag('js',new Date());
+        gtag('config','G-D6Y313B0HW');
+      }
+      function grant(){
+        gtag('consent','update',{analytics_storage:'granted',ad_storage:'granted',ad_user_data:'granted',ad_personalization:'granted'});
+        localStorage.setItem(key,'granted');
+        loadGoogle();
+        var b=document.getElementById('elaivaCookieBanner');if(b)b.remove();
+      }
+      function deny(){
+        gtag('consent','update',{analytics_storage:'denied',ad_storage:'denied',ad_user_data:'denied',ad_personalization:'denied'});
+        localStorage.setItem(key,'denied');
+        var b=document.getElementById('elaivaCookieBanner');if(b)b.remove();
+      }
+      function show(){
+        var b=document.createElement('div');
+        b.id='elaivaCookieBanner';b.setAttribute('role','dialog');b.setAttribute('aria-label','Cookie consent');
+        b.innerHTML='<div style="max-width:1100px;margin:auto;display:flex;gap:18px;align-items:center;justify-content:space-between;flex-wrap:wrap"><div style="flex:1;min-width:240px"><strong>Cookies &amp; analytics</strong><div style="margin-top:5px;color:#555;font-size:14px;line-height:1.5">Χρησιμοποιούμε analytics και τεχνολογίες διαφήμισης για να κατανοούμε την επισκεψιμότητα και να βελτιώνουμε την εμπειρία. Μπορείς να αποδεχτείς ή να απορρίψεις τα μη απαραίτητα cookies.</div></div><div style="display:flex;gap:10px;flex-wrap:wrap"><button id="elaivaCookieDeny" type="button" style="padding:10px 16px;border:1px solid #222;border-radius:24px;background:white;color:#222;cursor:pointer">Απόρριψη</button><button id="elaivaCookieAccept" type="button" style="padding:10px 16px;border:1px solid #222;border-radius:24px;background:#222;color:white;cursor:pointer">Αποδοχή</button></div></div>';
+        b.style.cssText='position:fixed;left:0;right:0;bottom:0;z-index:9999;background:#f8f7f4;border-top:1px solid #ddd;padding:16px 20px;box-shadow:0 -8px 30px rgba(0,0,0,.12);font-family:Arial,Helvetica,sans-serif';
+        document.body.appendChild(b);
+        document.getElementById('elaivaCookieAccept').onclick=grant;
+        document.getElementById('elaivaCookieDeny').onclick=deny;
+      }
+      window.addEventListener('DOMContentLoaded',function(){
+        if(saved==='granted')grant();
+        else if(saved==='denied')deny();
+        else show();
+      });
+    })();
+  </script>
 </head>
 <body>
   <header><div class="header-inner"><div class="logo">𝑬𝑳å𝒊𝑽𝑨 — 𝑻&𝑺 𝑪𝑶𝑴𝑷𝑨𝑵𝒀</div><button class="menu-button" onclick="toggleMenu()" aria-label="Open menu">☰</button><nav id="mainNav"><a href="#about" onclick="closeMenu()">About</a><a href="#services" onclick="closeMenu()">Services</a><a href="#packages" onclick="closeMenu()">Packages</a><a href="#demos" onclick="closeMenu()">Demos</a><a href="#contact" onclick="closeMenu()">Contact</a></nav></div></header>
