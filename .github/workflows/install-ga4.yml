@@ -5,6 +5,7 @@ on:
     branches: [main]
     paths:
       - '.github/workflows/install-ga4.yml'
+  workflow_dispatch:
 
 permissions:
   contents: write
@@ -20,84 +21,74 @@ jobs:
         shell: python
         run: |
           from pathlib import Path
-
           p = Path('index.html')
           html = p.read_text(encoding='utf-8')
           marker = 'ELAIva-GA4-CONSENT-START'
-
           if marker in html:
               print('GA4 consent integration already present; nothing to do.')
               raise SystemExit(0)
-
           block = r'''  <!-- ELAIva-GA4-CONSENT-START -->
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
-    gtag('consent', 'default', {
-      analytics_storage: 'denied',
-      ad_storage: 'denied',
-      ad_user_data: 'denied',
-      ad_personalization: 'denied',
-      wait_for_update: 500
+    window.elaivaGrantAnalytics = function(){
+      gtag('consent','update',{
+        analytics_storage:'granted',
+        ad_storage:'granted',
+        ad_user_data:'granted',
+        ad_personalization:'granted'
+      });
+      localStorage.setItem('elaiva_cookie_consent','granted');
+    };
+    window.elaivaDenyAnalytics = function(){
+      gtag('consent','update',{
+        analytics_storage:'denied',
+        ad_storage:'denied',
+        ad_user_data:'denied',
+        ad_personalization:'denied'
+      });
+      localStorage.setItem('elaiva_cookie_consent','denied');
+    };
+    gtag('consent','default',{
+      analytics_storage:'denied',
+      ad_storage:'denied',
+      ad_user_data:'denied',
+      ad_personalization:'denied'
     });
-  </script>
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-D6Y313B0HW"></script>
-  <script>
-    gtag('js', new Date());
-    gtag('config', 'G-D6Y313B0HW');
-
-    (function () {
-      var key = 'elaiva_cookie_consent';
-      var saved = localStorage.getItem(key);
-
-      function grant() {
-        gtag('consent', 'update', {
-          analytics_storage: 'granted',
-          ad_storage: 'granted',
-          ad_user_data: 'granted',
-          ad_personalization: 'granted'
-        });
-        localStorage.setItem(key, 'granted');
-        var banner = document.getElementById('elaivaCookieBanner');
-        if (banner) banner.remove();
+    (function(){
+      var saved=localStorage.getItem('elaiva_cookie_consent');
+      function show(){
+        var b=document.createElement('div');
+        b.id='elaivaCookieBanner';
+        b.setAttribute('role','dialog');
+        b.setAttribute('aria-label','Cookie consent');
+        b.innerHTML='<div style="max-width:1100px;margin:auto;display:flex;gap:18px;align-items:center;justify-content:space-between;flex-wrap:wrap"><div style="flex:1;min-width:240px"><strong>Cookies &amp; analytics</strong><div style="margin-top:5px;color:#555;font-size:14px;line-height:1.5">Χρησιμοποιούμε analytics και τεχνολογίες διαφήμισης για να κατανοούμε την επισκεψιμότητα και να βελτιώνουμε την εμπειρία. Μπορείς να αποδεχτείς ή να απορρίψεις τα μη απαραίτητα cookies.</div></div><div style="display:flex;gap:10px;flex-wrap:wrap"><button id="elaivaCookieDeny" type="button" style="padding:10px 16px;border:1px solid #222;border-radius:24px;background:white;color:#222;cursor:pointer">Απόρριψη</button><button id="elaivaCookieAccept" type="button" style="padding:10px 16px;border:1px solid #222;border-radius:24px;background:#222;color:white;cursor:pointer">Αποδοχή</button></div></div>';
+        b.style.cssText='position:fixed;left:0;right:0;bottom:0;z-index:9999;background:#f8f7f4;border-top:1px solid #ddd;padding:16px 20px;box-shadow:0 -8px 30px rgba(0,0,0,.12);font-family:Arial,Helvetica,sans-serif';
+        document.body.appendChild(b);
+        document.getElementById('elaivaCookieAccept').onclick=function(){window.elaivaGrantAnalytics();b.remove();loadGoogle();};
+        document.getElementById('elaivaCookieDeny').onclick=function(){window.elaivaDenyAnalytics();b.remove();};
       }
-
-      function deny() {
-        gtag('consent', 'update', {
-          analytics_storage: 'denied',
-          ad_storage: 'denied',
-          ad_user_data: 'denied',
-          ad_personalization: 'denied'
-        });
-        localStorage.setItem(key, 'denied');
-        var banner = document.getElementById('elaivaCookieBanner');
-        if (banner) banner.remove();
+      function loadGoogle(){
+        if(window.elaivaGoogleLoaded)return;
+        window.elaivaGoogleLoaded=true;
+        var s=document.createElement('script');
+        s.async=true;
+        s.src='https://www.googletagmanager.com/gtag/js?id=G-D6Y313B0HW';
+        document.head.appendChild(s);
+        gtag('js',new Date());
+        gtag('config','G-D6Y313B0HW');
       }
-
-      function showBanner() {
-        var banner = document.createElement('div');
-        banner.id = 'elaivaCookieBanner';
-        banner.setAttribute('role', 'dialog');
-        banner.setAttribute('aria-label', 'Cookie consent');
-        banner.innerHTML = '<div style="max-width:1100px;margin:auto;display:flex;gap:18px;align-items:center;justify-content:space-between;flex-wrap:wrap"><div style="flex:1;min-width:240px"><strong>Cookies &amp; analytics</strong><div style="margin-top:5px;color:#555;font-size:14px;line-height:1.5">Χρησιμοποιούμε analytics και τεχνολογίες διαφήμισης για να κατανοούμε την επισκεψιμότητα και να βελτιώνουμε την εμπειρία. Μπορείς να αποδεχτείς ή να απορρίψεις τα μη απαραίτητα cookies.</div></div><div style="display:flex;gap:10px;flex-wrap:wrap"><button id="elaivaCookieDeny" type="button" style="padding:10px 16px;border:1px solid #222;border-radius:24px;background:white;color:#222;cursor:pointer">Απόρριψη</button><button id="elaivaCookieAccept" type="button" style="padding:10px 16px;border:1px solid #222;border-radius:24px;background:#222;color:white;cursor:pointer">Αποδοχή</button></div></div>';
-        banner.style.cssText = 'position:fixed;left:0;right:0;bottom:0;z-index:9999;background:#f8f7f4;border-top:1px solid #ddd;padding:16px 20px;box-shadow:0 -8px 30px rgba(0,0,0,.12);font-family:Arial,Helvetica,sans-serif';
-        document.body.appendChild(banner);
-        document.getElementById('elaivaCookieAccept').addEventListener('click', grant);
-        document.getElementById('elaivaCookieDeny').addEventListener('click', deny);
-      }
-
-      window.addEventListener('DOMContentLoaded', function () {
-        if (saved === 'granted') grant();
-        else if (saved === 'denied') deny();
-        else showBanner();
+      window.addEventListener('DOMContentLoaded',function(){
+        if(saved==='granted'){window.elaivaGrantAnalytics();loadGoogle();}
+        else if(saved==='denied'){window.elaivaDenyAnalytics();}
+        else{show();}
       });
     })();
   </script>
   <!-- ELAIva-GA4-CONSENT-END -->
 '''
-
-          html = html.replace('</head>', block + '</head>', 1)
-          p.write_text(html, encoding='utf-8')
+          html=html.replace('</head>',block+'</head>',1)
+          p.write_text(html,encoding='utf-8')
 
       - name: Commit changes
         run: |
