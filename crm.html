@@ -33,7 +33,7 @@ const CRM_API='https://elaiva-leads-api.vercel.app/api/crm/leads';
 const CRM_KEY_STORAGE='elaiva_crm_api_key';
 let remoteLeads=[];
 let db=JSON.parse(localStorage.getItem(KEY)||'null')||{customers:[],leads:[],followups:[],appointments:[],invoices:[],support:[]};
-function save(){try{localStorage.setItem(KEY,JSON.stringify(db));return true}catch(error){alert('Δεν ήταν δυνατή η αποθήκευση του CRM.');return false}}
+function save(){try{const snapshot=JSON.stringify(db);localStorage.setItem(KEY,snapshot);const check=localStorage.getItem(KEY);if(check!==snapshot)throw new Error('storage mismatch');return true}catch(error){alert('Δεν ήταν δυνατή η αποθήκευση του CRM.');return false}}
 const esc=s=>String(s??'').replace(/[&<>\"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;',"'":'&#039;'}[m]));
 const pill=s=>`<span class="pill">${esc(s||'—')}</span>`;
 const id=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,7);
@@ -55,7 +55,7 @@ function openCustomer(data=null){customerModal.classList.add('open');modalTitle.
 function closeModal(){customerModal.classList.remove('open')}
 function editCustomer(i){let x=db.customers.find(c=>c.id===i);if(x)openCustomer(x)}
 function deleteCustomer(i){let x=db.customers.find(c=>c.id===i);if(!x)return;if(confirm(`Να διαγραφεί ο πελάτης «${x.name}»;`)){db.customers=db.customers.filter(c=>c.id!==i);save();render()}}
-customerForm.onsubmit=e=>{e.preventDefault();let f=new FormData(customerForm),o=Object.fromEntries(f.entries());o.dnc=o.dnc==='true';const existingId=String(o.id||'').trim();if(existingId){const i=db.customers.findIndex(x=>String(x.id)===existingId);if(i>-1)db.customers[i]={...db.customers[i],...o,id:existingId};else db.customers.push({...o,id:existingId})}else{delete o.id;o.id=id();db.customers=[...db.customers,o]}if(save()){closeModal();render()}};
+customerForm.onsubmit=e=>{e.preventDefault();let f=new FormData(customerForm),o=Object.fromEntries(f.entries());o.dnc=o.dnc==='true';const existingId=String(o.id||'').trim();if(existingId){const i=db.customers.findIndex(x=>String(x.id)===existingId);if(i>-1)db.customers[i]={...db.customers[i],...o,id:existingId};else db.customers.push({...o,id:existingId})}else{delete o.id;o.id=id();db.customers.push(o)}db.customers=db.customers.filter((x,i,a)=>a.findIndex(y=>String(y.id)===String(x.id))===i);if(save()){closeModal();render()}};
 addBtn.onclick=()=>openCustomer();exportBtn.onclick=()=>{let blob=new Blob([JSON.stringify(db,null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='elaiva-crm-backup.json';a.click();URL.revokeObjectURL(a.href)};
 crmConnectBtn.onclick=connectCrm;refreshLeadsBtn.onclick=loadRemoteLeads;customerSearch.oninput=render;leadSearch.oninput=render;followSearch.oninput=render;customerModal.onclick=e=>{if(e.target===customerModal)closeModal()};if(getCrmKey())loadRemoteLeads();show('dashboard');
 </script></body></html>
