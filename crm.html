@@ -39,62 +39,165 @@ const KEY='elaiva_crm_v2';
 const CRM_API='https://elaiva-leads-api.vercel.app/api/crm/leads';
 const CRM_KEY_STORAGE='elaiva_crm_api_key';
 let remoteLeads=[];
-let leadMeta=JSON.parse(localStorage.getItem('elaiva_crm_lead_meta_v1')||'{}');
-function saveLeadMeta(){localStorage.setItem('elaiva_crm_lead_meta_v1',JSON.stringify(leadMeta))}
-function leadKey(x){return String(x.id??x.email??x.phone??x.name??'')}
-function toggleLeadFollowup(k){leadMeta[k]??={};leadMeta[k].followup=!leadMeta[k].followup;saveLeadMeta();render()}
-function toggleLeadDetails(k){const el=document.getElementById('follow-detail-'+CSS.escape(k));if(el)el.classList.toggle('open')}
-function saveLeadFollowupNotes(k){const el=document.getElementById('follow-notes-'+CSS.escape(k));if(!el)return;leadMeta[k]??={};leadMeta[k].notes=el.value;saveLeadMeta();el.parentElement.classList.remove('open');render()}
-
 let db=JSON.parse(localStorage.getItem(KEY)||'null')||{customers:[],leads:[],followups:[],appointments:[],invoices:[],support:[]};
-function save(){try{const snapshot=JSON.stringify(db);localStorage.setItem(KEY,snapshot);const check=localStorage.getItem(KEY);if(check!==snapshot)throw new Error('storage mismatch');return true}catch(error){alert('Δεν ήταν δυνατή η αποθήκευση του CRM.');return false}}
+
+function save(){try{localStorage.setItem(KEY,JSON.stringify(db));return true}catch(error){alert('Δεν ήταν δυνατή η αποθήκευση του CRM.');return false}}
 const esc=s=>String(s??'').replace(/[&<>\"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;',"'":'&#039;'}[m]));
 const pill=s=>`<span class="pill">${esc(s||'—')}</span>`;
 const id=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,7);
 const fmt=s=>s?new Date(s).toLocaleString('el-GR',{dateStyle:'short',timeStyle:'short'}):'—';
+const leadKey=x=>String(x.id??x.external_id??x.email??x.phone??x.name??'');
+
 function getCrmKey(){return localStorage.getItem(CRM_KEY_STORAGE)||''}
 function connectCrm(){const current=getCrmKey();const key=prompt('Βάλε το CRM API key που έχεις ορίσει στο Vercel:',current);if(key===null)return;if(!key.trim())return alert('Δεν δόθηκε API key.');localStorage.setItem(CRM_KEY_STORAGE,key.trim());loadRemoteLeads()}
-async function loadRemoteLeads(){const key=getCrmKey();if(!key){return alert('Πρώτα πάτησε «Σύνδεση Leads» και βάλε το CRM API key.')}leadRows.innerHTML='<tr><td colspan="7" class="empty">Φόρτωση leads...</td></tr>';try{const r=await fetch(CRM_API,{headers:{'X-CRM-Key':key}});const data=await r.json();if(r.status===401){localStorage.removeItem(CRM_KEY_STORAGE);remoteLeads=[];render();return alert('Το CRM API key δεν είναι σωστό ή έχει λήξει.')}if(!r.ok||!data.success)throw new Error(data.error||'API error');remoteLeads=Array.isArray(data.leads)?data.leads:[];render()}catch(error){remoteLeads=[];render();alert('Δεν ήταν δυνατή η ανάκτηση των leads από το Neon API.')}}
-function show(v){document.querySelectorAll('.view').forEach(x=>x.classList.remove('active'));document.getElementById(v).classList.add('active');document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.view===v));document.getElementById('title').textContent={dashboard:'ELåiVA CRM',customers:'Πελάτες',leads:'Leads',followups:'Επανακλήσεις',appointments:'Ραντεβού',invoices:'Τιμολόγια',support:'Support'}[v]||'ELåiVA CRM';render();if(v==='leads')loadRemoteLeads()}
-document.querySelectorAll('.nav button').forEach(b=>b.onclick=()=>show(b.dataset.view));
-function render(){cCustomers.textContent=db.customers.length;cLeads.textContent=remoteLeads.length+db.customers.filter(x=>x.lead&&x.lead!=='Μετατράπηκε σε πελάτη').length;cFollowups.textContent=db.customers.filter(x=>x.followup).length;cSupport.textContent=db.support.filter(x=>!['Επιλύθηκε','Κλειστό','Resolved','Closed'].includes(x.status)).length;
-let q=(customerSearch?.value||'').toLowerCase();customerRows.innerHTML=db.customers.filter(x=>Object.values(x).join(' ').toLowerCase().includes(q)).map(x=>`<tr><td><b>${esc(x.name)}</b></td><td>${esc(x.company)}</td><td>${esc(x.email)}</td><td>${esc(x.phone)}</td><td>${pill(x.lead)}</td><td>${fmt(x.followup)}</td><td>${fmt(x.appointment)}</td><td>${pill(x.invoice)}</td><td>${esc(x.industry)}</td><td>${pill(x.service)}</td><td>${pill(x.status)}</td><td>${x.dnc?'☑️ Ναι':'☐ Όχι'}</td><td class="actions-cell"><button class="iconbtn" onclick="editCustomer('${x.id}')">✎</button><button class="iconbtn" onclick="deleteCustomer('${x.id}')">🗑</button></td></tr>`).join('')||'<tr><td colspan="13" class="empty">Δεν υπάρχουν πελάτες ακόμα.</td></tr>';
-let lq=(leadSearch?.value||'').toLowerCase();
-let ls=(leadStatusFilter?.value||'').trim().toLowerCase();
-let lf=leadFollowFilter?.value||'';
-const normStatus=s=>String(s??'').trim().toLowerCase().normalize('NFD').replace(/[\\u0300-\\u036f]/g,'');
-let localLeads=db.customers.filter(x=>{
- const status=normStatus(x.status||x.lead||'Νέο');
- return x.lead&&x.lead!=='Μετατράπηκε σε πελάτη'
-   &&Object.values(x).join(' ').toLowerCase().includes(lq)
-   &&(!ls||status===normStatus(ls));
-});
-let remoteFiltered=remoteLeads.filter(x=>{
- const k=leadKey(x),m=leadMeta[k]||{},txt=Object.values(x).join(' ').toLowerCase();
- const status=normStatus(x.status||'Νέο');
- return txt.includes(lq)
-   &&(!ls||status===normStatus(ls))
-   &&(!lf||(lf==='done'?!!m.followup:!m.followup));
-});
-let remoteRows=remoteFiltered.map(x=>{
- const k=leadKey(x),m=leadMeta[k]||{},done=!!m.followup,hasNotes=!!(m.notes||'');
- return `<tr>
-<td><label class="follow-inline"><input class="follow-check" type="checkbox" ${done?'checked':''} onchange="toggleLeadFollowup(\'${esc(k)}\')"><b>${esc(x.name)}</b></label><div id="follow-detail-${esc(k)}" class="follow-detail"><textarea id="follow-notes-${esc(k)}" placeholder="Γράψε εδώ τι ειπώθηκε, τι στάλθηκε, τι περιμένουμε κλπ.">${esc(m.notes||'')}</textarea><div class="follow-actions"><button class="btn" onclick="saveLeadFollowupNotes('${esc(k)}')">Αποθήκευση</button><button class="btn secondary" onclick="toggleLeadDetails('${esc(k)}')">Κλείσιμο</button></div></div></td>
-<td>${esc(x.business_name)}</td><td>${esc(x.email)}</td><td>${esc(x.phone)}</td><td>${pill(x.status)}</td><td>Website</td>
-<td><button class="follow-toggle ${done?'done':''}" onclick="toggleLeadFollowup('${esc(k)}')">${done?'✓ Follow-up έγινε':'☐ Follow-up'}</button><button class="iconbtn" onclick="toggleLeadDetails('${esc(k)}')" title="Σημειώσεις follow-up">${hasNotes?'💬':'📝'}</button></td></tr>`
-}).join('');
-let localRows=localLeads.map(x=>{const k=leadKey(x),m=leadMeta[k]||{},done=!!m.followup,hasNotes=!!(m.notes||'');return `<tr><td><label class="follow-inline"><input class="follow-check" type="checkbox" ${done?'checked':''} onchange="toggleLeadFollowup(\'${esc(k)}\')"><b>${esc(x.name)}</b></label></td><td>${esc(x.company)}</td><td>${esc(x.email)}</td><td>${esc(x.phone)}</td><td>${pill(x.status||x.lead||'Νέο')}</td><td>CRM</td><td><button class="iconbtn" onclick="toggleLeadDetails(\'${esc(k)}\')" title="Σημειώσεις follow-up">${hasNotes?'💬':'📝'}</button><button class="iconbtn" onclick="editCustomer(\'${x.id}\')">✎</button></td></tr>`}).join('');
-leadRows.innerHTML=(remoteRows+localRows)||'<tr><td colspan="7" class="empty">Δεν υπάρχουν leads ακόμα.</td></tr>';
-let fq=(followSearch?.value||'').toLowerCase();followRows.innerHTML=db.customers.filter(x=>x.followup&&Object.values(x).join(' ').toLowerCase().includes(fq)).sort((a,b)=>new Date(a.followup)-new Date(b.followup)).map(x=>`<tr><td>${fmt(x.followup)}</td><td>${esc(x.name)}</td><td>Επανακλήση</td><td>${esc(x.notes)||'—'}</td><td><button class="iconbtn" onclick="editCustomer('${x.id}')">✎</button></td></tr>`).join('')||'<tr><td colspan="5" class="empty">Δεν υπάρχουν επανακλήσεις.</td></tr>';
-appointmentRows.innerHTML=db.customers.filter(x=>x.appointment).sort((a,b)=>new Date(a.appointment)-new Date(b.appointment)).map(x=>`<tr><td>${fmt(x.appointment)}</td><td>${esc(x.name)}</td><td>${esc(x.service)}</td><td>${pill(x.status)}</td><td><button class="iconbtn" onclick="editCustomer('${x.id}')">✎</button></td></tr>`).join('')||'<tr><td colspan="5" class="empty">Δεν υπάρχουν ραντεβού.</td></tr>';
-invoiceRows.innerHTML=db.invoices.map(x=>`<tr><td>${esc(x.number)}</td><td>${esc(x.customer)}</td><td>${esc(x.date)}</td><td>${esc(x.amount)} €</td><td>${pill(x.status)}</td><td></td></tr>`).join('')||'<tr><td colspan="6" class="empty">Δεν υπάρχουν τιμολόγια ακόμα.</td></tr>';
-supportRows.innerHTML=db.support.map(x=>`<tr><td>${esc(x.ticket)}</td><td>${esc(x.customer)}</td><td>${esc(x.problem)}</td><td>${pill(x.priority)}</td><td>${pill(x.status)}</td><td></td></tr>`).join('')||'<tr><td colspan="6" class="empty">Δεν υπάρχουν αιτήματα support.</td></tr>';
+async function apiRequest(url,options={}){const key=getCrmKey();if(!key){connectCrm();throw new Error('NO_API_KEY')}const headers={...(options.headers||{}),'X-CRM-Key':key,'Content-Type':'application/json'};const r=await fetch(url,{...options,headers});let data={};try{data=await r.json()}catch{}if(r.status===401){localStorage.removeItem(CRM_KEY_STORAGE);throw new Error('Το CRM API key δεν είναι σωστό ή έχει λήξει.')}if(!r.ok||!data.success)throw new Error(data.error||'API error');return data}
+
+async function loadRemoteLeads(silent=false){
+  const key=getCrmKey();
+  if(!key){if(!silent)alert('Πρώτα πάτησε «Σύνδεση Leads» και βάλε το CRM API key.');return}
+  if(!silent)leadRows.innerHTML='<tr><td colspan="7" class="empty">Φόρτωση leads...</td></tr>';
+  try{
+    const data=await apiRequest(CRM_API,{headers:{'X-CRM-Key':key}});
+    remoteLeads=Array.isArray(data.leads)?data.leads:[];
+    render();
+  }catch(error){
+    remoteLeads=[];
+    render();
+    if(!silent&&error.message!=='NO_API_KEY')alert(error.message||'Δεν ήταν δυνατή η ανάκτηση των leads από το Neon API.');
+  }
 }
-function openCustomer(data=null){customerModal.classList.add('open');modalTitle.textContent=data?'Επεξεργασία πελάτη':'Νέος πελάτης';customerForm.reset();if(data)Object.keys(data).forEach(k=>{if(customerForm.elements[k])customerForm.elements[k].value=data[k]??''})}
+
+async function migrateLocalCustomers(){
+  if(!getCrmKey()||!db.customers.length)return;
+  let changed=false;
+  for(const x of [...db.customers]){
+    if(x.__neonMigrated)continue;
+    try{
+      const payload={
+        external_id:String(x.id||id()),
+        name:x.name||'',
+        company:x.company||'',
+        business_name:x.company||'',
+        email:x.email||'',
+        phone:x.phone||'',
+        lead:x.lead||'Νέο lead',
+        followup:x.followup||'',
+        appointment:x.appointment||'',
+        invoice:x.invoice||'Δεν υπάρχει',
+        industry:x.industry||'',
+        sector:x.industry||'',
+        service:x.service||'Δεν έχει επιλεγεί',
+        status:x.status||'Νέο',
+        dnc:!!x.dnc,
+        notes:x.notes||'',
+        source:'CRM',
+        followup_done:!!x.followup_done,
+        followup_notes:x.followup_notes||''
+      };
+      const result=await apiRequest(CRM_API,{method:'POST',body:JSON.stringify(payload)});
+      const remote=result.lead;
+      const i=db.customers.findIndex(c=>String(c.id)===String(x.id));
+      if(i>-1)db.customers[i]={...db.customers[i],id:String(remote.id),__neonMigrated:true};
+      changed=true;
+    }catch(error){
+      if(error.message.includes('υπάρχει ήδη')){
+        const i=db.customers.findIndex(c=>String(c.id)===String(x.id));
+        if(i>-1)db.customers[i].__neonMigrated=true;
+        changed=true;
+      }else{
+        console.warn('CRM migration failed',x,error);
+      }
+    }
+  }
+  if(changed)save();
+}
+
+function toggleRemoteFollowup(idValue,done){
+  const x=remoteLeads.find(r=>String(r.id)===String(idValue));if(!x)return;
+  updateRemote(x.id,{...x,followup_done:done}).catch(()=>{});
+}
+async function saveRemoteFollowupNotes(idValue){
+  const el=document.getElementById('follow-notes-'+CSS.escape(String(idValue)));if(!el)return;
+  const x=remoteLeads.find(r=>String(r.id)===String(idValue));if(!x)return;
+  try{await updateRemote(x.id,{...x,followup_notes:el.value});await loadRemoteLeads(true)}catch(error){alert(error.message)}
+}
+
+async function updateRemote(idValue,payload){
+  const clean={...payload};delete clean.id;delete clean.created_at;
+  return apiRequest(`${CRM_API}/${encodeURIComponent(idValue)}`,{method:'PUT',body:JSON.stringify(clean)});
+}
+
+function show(v){document.querySelectorAll('.view').forEach(x=>x.classList.remove('active'));document.getElementById(v).classList.add('active');document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.view===v));document.getElementById('title').textContent={dashboard:'ELåiVA CRM',customers:'Πελάτες',leads:'Leads',followups:'Επανακλήσεις',appointments:'Ραντεβού',invoices:'Τιμολόγια',support:'Support'}[v]||'ELåiVA CRM';render();if(v==='leads')loadRemoteLeads(true)}
+document.querySelectorAll('.nav button').forEach(b=>b.onclick=()=>show(b.dataset.view));
+
+function render(){
+  const crmCustomers=remoteLeads.filter(x=>String(x.source||'CRM').toUpperCase()==='CRM');
+  cCustomers.textContent=crmCustomers.length;
+  cLeads.textContent=remoteLeads.filter(x=>String(x.lead||'')!=='Μετατράπηκε σε πελάτη').length;
+  cFollowups.textContent=crmCustomers.filter(x=>x.followup&&!x.followup_done).length;
+  cSupport.textContent=db.support.filter(x=>!['Επιλύθηκε','Κλειστό','Resolved','Closed'].includes(x.status)).length;
+
+  let q=(customerSearch?.value||'').toLowerCase();
+  customerRows.innerHTML=crmCustomers.filter(x=>Object.values(x).join(' ').toLowerCase().includes(q)).map(x=>`<tr>
+<td><b>${esc(x.name)}</b></td><td>${esc(x.company||x.business_name)}</td><td>${esc(x.email)}</td><td>${esc(x.phone)}</td>
+<td>${pill(x.lead)}</td><td>${fmt(x.followup)}</td><td>${fmt(x.appointment)}</td><td>${pill(x.invoice)}</td><td>${esc(x.industry||x.sector)}</td><td>${pill(x.service)}</td><td>${pill(x.status)}</td><td>${x.dnc?'☑️ Ναι':'☐ Όχι'}</td>
+<td class="actions-cell"><button class="iconbtn" onclick="editCustomer('${esc(x.id)}')">✎</button><button class="iconbtn" onclick="deleteCustomer('${esc(x.id)}')">🗑</button></td></tr>`).join('')||'<tr><td colspan="13" class="empty">Δεν υπάρχουν πελάτες ακόμα.</td></tr>';
+
+  let lq=(leadSearch?.value||'').toLowerCase(),ls=(leadStatusFilter?.value||'').trim().toLowerCase(),lf=leadFollowFilter?.value||'';
+  const normStatus=s=>String(s??'').trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+  let filtered=remoteLeads.filter(x=>{
+    const txt=Object.values(x).join(' ').toLowerCase(),status=normStatus(x.status||'Νέο'),done=!!x.followup_done;
+    return txt.includes(lq)&&(!ls||status===normStatus(ls))&&(!lf||(lf==='done'?done:!done));
+  });
+  let rows=filtered.map(x=>{
+    const done=!!x.followup_done,hasNotes=!!(x.followup_notes||''),isCrm=String(x.source||'').toUpperCase()==='CRM';
+    const edit=isCrm?`<button class="iconbtn" onclick="editCustomer('${esc(x.id)}')">✎</button>`:'';
+    return `<tr>
+<td><label class="follow-inline"><input class="follow-check" type="checkbox" ${done?'checked':''} onchange="toggleRemoteFollowup('${esc(x.id)}',this.checked)"><b>${esc(x.name)}</b></label>
+<div id="follow-detail-${esc(x.id)}" class="follow-detail"><textarea id="follow-notes-${esc(x.id)}" placeholder="Γράψε εδώ τι ειπώθηκε, τι στάλθηκε, τι περιμένουμε κλπ.">${esc(x.followup_notes||'')}</textarea><div class="follow-actions"><button class="btn" onclick="saveRemoteFollowupNotes('${esc(x.id)}')">Αποθήκευση</button><button class="btn secondary" onclick="toggleLeadDetails('${esc(x.id)}')">Κλείσιμο</button></div></div></td>
+<td>${esc(x.business_name||x.company)}</td><td>${esc(x.email)}</td><td>${esc(x.phone)}</td><td>${pill(x.status)}</td><td>${isCrm?'CRM':'Website'}</td>
+<td><button class="follow-toggle ${done?'done':''}" onclick="toggleRemoteFollowup('${esc(x.id)}',${!done})">${done?'✓ Follow-up έγινε':'☐ Follow-up'}</button><button class="iconbtn" onclick="toggleLeadDetails('${esc(x.id)}')" title="Σημειώσεις follow-up">${hasNotes?'💬':'📝'}</button>${edit}</td></tr>`
+  }).join('');
+  leadRows.innerHTML=rows||'<tr><td colspan="7" class="empty">Δεν υπάρχουν leads ακόμα.</td></tr>';
+
+  let fq=(followSearch?.value||'').toLowerCase();
+  followRows.innerHTML=crmCustomers.filter(x=>x.followup&&!x.followup_done&&Object.values(x).join(' ').toLowerCase().includes(fq)).sort((a,b)=>new Date(a.followup)-new Date(b.followup)).map(x=>`<tr><td>${fmt(x.followup)}</td><td>${esc(x.name)}</td><td>Επανακλήση</td><td>${esc(x.notes||x.followup_notes)||'—'}</td><td><button class="iconbtn" onclick="editCustomer('${esc(x.id)}')">✎</button></td></tr>`).join('')||'<tr><td colspan="5" class="empty">Δεν υπάρχουν επανακλήσεις.</td></tr>';
+
+  appointmentRows.innerHTML=crmCustomers.filter(x=>x.appointment).sort((a,b)=>new Date(a.appointment)-new Date(b.appointment)).map(x=>`<tr><td>${fmt(x.appointment)}</td><td>${esc(x.name)}</td><td>${esc(x.service)}</td><td>${pill(x.status)}</td><td><button class="iconbtn" onclick="editCustomer('${esc(x.id)}')">✎</button></td></tr>`).join('')||'<tr><td colspan="5" class="empty">Δεν υπάρχουν ραντεβού.</td></tr>';
+
+  invoiceRows.innerHTML=db.invoices.map(x=>`<tr><td>${esc(x.number)}</td><td>${esc(x.customer)}</td><td>${esc(x.date)}</td><td>${esc(x.amount)} €</td><td>${pill(x.status)}</td><td></td></tr>`).join('')||'<tr><td colspan="6" class="empty">Δεν υπάρχουν τιμολόγια ακόμα.</td></tr>';
+  supportRows.innerHTML=db.support.map(x=>`<tr><td>${esc(x.ticket)}</td><td>${esc(x.customer)}</td><td>${esc(x.problem)}</td><td>${pill(x.priority)}</td><td>${pill(x.status)}</td><td></td></tr>`).join('')||'<tr><td colspan="6" class="empty">Δεν υπάρχουν αιτήματα support.</td></tr>';
+}
+
+function toggleLeadDetails(k){const el=document.getElementById('follow-detail-'+CSS.escape(String(k)));if(el)el.classList.toggle('open')}
+
+function openCustomer(data=null){customerModal.classList.add('open');modalTitle.textContent=data?'Επεξεργασία πελάτη':'Νέος πελάτης';customerForm.reset();if(data)Object.keys(data).forEach(k=>{if(customerForm.elements[k])customerForm.elements[k].value=data[k]??''});}
 function closeModal(){customerModal.classList.remove('open')}
-function editCustomer(i){let x=db.customers.find(c=>c.id===i);if(x)openCustomer(x)}
-function deleteCustomer(i){let x=db.customers.find(c=>c.id===i);if(!x)return;if(confirm(`Να διαγραφεί ο πελάτης «${x.name}»;`)){db.customers=db.customers.filter(c=>c.id!==i);save();render()}}
-customerForm.onsubmit=e=>{e.preventDefault();let f=new FormData(customerForm),o=Object.fromEntries(f.entries());o.dnc=o.dnc==='true';const existingId=String(o.id||'').trim();if(existingId){const i=db.customers.findIndex(x=>String(x.id)===existingId);if(i>-1)db.customers[i]={...db.customers[i],...o,id:existingId};else db.customers.push({...o,id:existingId})}else{delete o.id;o.id=id();db.customers.push(o)}db.customers=db.customers.filter((x,i,a)=>a.findIndex(y=>String(y.id)===String(x.id))===i);if(save()){closeModal();render()}};
-addBtn.onclick=()=>openCustomer();exportBtn.onclick=()=>{let blob=new Blob([JSON.stringify(db,null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='elaiva-crm-backup.json';a.click();URL.revokeObjectURL(a.href)};
-crmConnectBtn.onclick=connectCrm;refreshLeadsBtn.onclick=loadRemoteLeads;customerSearch.oninput=render;leadSearch.oninput=render;leadStatusFilter.onchange=render;leadFollowFilter.onchange=render;followSearch.oninput=render;customerModal.onclick=e=>{if(e.target===customerModal)closeModal()};if(getCrmKey())loadRemoteLeads();show('dashboard');
+function editCustomer(i){const x=remoteLeads.find(c=>String(c.id)===String(i));if(x&&String(x.source||'').toUpperCase()==='CRM')openCustomer(x)}
+async function deleteCustomer(i){const x=remoteLeads.find(c=>String(c.id)===String(i));if(!x)return;if(!confirm(`Να διαγραφεί ο πελάτης «${x.name}»;`))return;try{await apiRequest(`${CRM_API}/${encodeURIComponent(i)}`,{method:'DELETE'});await loadRemoteLeads(true)}catch(error){alert(error.message)}}
+
+customerForm.onsubmit=async e=>{
+  e.preventDefault();
+  if(!getCrmKey())return alert('Πρώτα σύνδεσε το CRM με το API.');
+  const f=new FormData(customerForm),o=Object.fromEntries(f.entries());
+  o.dnc=o.dnc==='true';o.source='CRM';o.company=o.company||'';o.business_name=o.company;o.industry=o.industry||'';o.sector=o.industry;o.followup_done=!!(remoteLeads.find(x=>String(x.id)===String(o.id))?.followup_done);o.followup_notes=remoteLeads.find(x=>String(x.id)===String(o.id))?.followup_notes||'';
+  try{
+    if(o.id){await updateRemote(o.id,o)}else{delete o.id;await apiRequest(CRM_API,{method:'POST',body:JSON.stringify(o)})}
+    closeModal();await loadRemoteLeads(true);
+  }catch(error){alert(error.message||'Δεν ήταν δυνατή η αποθήκευση.')}
+};
+
+addBtn.onclick=()=>openCustomer();
+exportBtn.onclick=()=>{const blob=new Blob([JSON.stringify(remoteLeads,null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='elaiva-crm-backup.json';a.click();URL.revokeObjectURL(a.href)};
+crmConnectBtn.onclick=async()=>{connectCrm();setTimeout(async()=>{await migrateLocalCustomers();await loadRemoteLeads(true)},300)};
+refreshLeadsBtn.onclick=()=>loadRemoteLeads();
+customerSearch.oninput=render;leadSearch.oninput=render;leadStatusFilter.onchange=render;leadFollowFilter.onchange=render;followSearch.oninput=render;customerModal.onclick=e=>{if(e.target===customerModal)closeModal()};
+
+(async()=>{
+  if(getCrmKey()){
+    await migrateLocalCustomers();
+    await loadRemoteLeads(true);
+  }
+  show('dashboard');
+})();
 </script></body></html>
