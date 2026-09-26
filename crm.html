@@ -19,7 +19,7 @@
 <div class="app">
 <aside class="side"><div class="brand">𝑬𝑳å𝒊𝑽𝑨 — 𝑻&𝑺 𝑪𝑶𝑴𝑷𝑨𝑵𝒀</div><nav class="nav">
 <button data-view="dashboard">⌂ Dashboard</button><button data-view="customers">👥 Πελάτες</button><button data-view="leads">🎯 Leads</button><button data-view="followups">↻ Επανακλήσεις</button><button data-view="appointments">📅 Ραντεβού</button><button data-view="invoices">€ Τιμολόγια</button><button data-view="support">♧ Support</button></nav></aside>
-<main class="main"><div class="top"><h1 id="title">ELåiVA CRM</h1><div class="actions"><button class="btn secondary" id="crmConnectBtn">🔐 Σύνδεση Leads</button><button class="btn secondary" id="exportBtn">↓ Εξαγωγή</button><button class="btn" id="addBtn">+ Νέος πελάτης</button></div></div>
+<main class="main"><div class="top"><h1 id="title">ELåiVA CRM</h1><div class="actions"><button class="btn secondary" id="savePageBtn">💾 Αποθήκευση σελίδας</button><button class="btn secondary" id="crmConnectBtn">🔐 Σύνδεση Leads</button><button class="btn secondary" id="exportBtn">↓ Εξαγωγή</button><button class="btn" id="addBtn">+ Νέος πελάτης</button></div></div>
 <section id="dashboard" class="view active"><div class="cards"><div class="card"><small>Πελάτες</small><strong id="cCustomers">0</strong><div class="mini">Συνολικοί πελάτες</div></div><div class="card"><small>Leads</small><strong id="cLeads">0</strong><div class="mini">Νέες ευκαιρίες</div></div><div class="card"><small>Επανακλήσεις</small><strong id="cFollowups">0</strong><div class="mini">Προγραμματισμένες</div></div><div class="card"><small>Ανοιχτά Support</small><strong id="cSupport">0</strong><div class="mini">Εκκρεμή αιτήματα</div></div></div><div class="panel dashboard-box"><h2 class="sectiontitle">Γρήγορη εικόνα</h2><p>Καλώς ήρθες στο ELåiVA CRM. Από εδώ διαχειρίζεσαι πελάτες, leads, επανακλήσεις, ραντεβού, τιμολόγια και support.</p><div class="quick"><div class="quickbox"><h3>⚡ Γρήγορες ενέργειες</h3><button class="btn" onclick="openCustomer()">+ Προσθήκη πελάτη</button></div><div class="quickbox"><h3>💾 Αποθήκευση</h3><p class="note">Η έκδοση αυτή αποθηκεύει προσωρινά τα δεδομένα στον browser. Τα leads του website φορτώνονται πλέον από το ασφαλισμένο API.</p></div></div></div></section>
 <section id="customers" class="view"><div class="panel"><div class="toolbar"><input id="customerSearch" class="search" placeholder="Αναζήτηση πελάτη, εταιρείας, email, τηλεφώνου..."><button class="btn" onclick="openCustomer()">+ Πελάτης</button></div><div class="tablewrap"><table><thead><tr><th>Πελάτης</th><th>company</th><th>Email</th><th>Τηλέφωνο</th><th>leads</th><th>επανακληση</th><th>ραντεβου</th><th>τιμολογια</th><th>κλαδος</th><th>Υπηρεσία</th><th>status</th><th>do not call</th><th></th></tr></thead><tbody id="customerRows"></tbody></table></div></div></section>
 <section id="leads" class="view"><div class="panel"><div class="toolbar"><input id="leadSearch" class="search" placeholder="Αναζήτηση lead..."><select id="leadStatusFilter" class="search" style="flex:0 1 220px;min-width:190px"><option value="">Όλα τα status</option><option>Νέο</option><option>Επικοινωνήθηκε</option><option>Ραντεβού</option><option>Προσφορά στάλθηκε</option><option>Επιβεβαιωμένο</option><option>Άρνηση</option></select><select id="leadFollowFilter" class="search" style="flex:0 1 190px;min-width:170px"><option value="">Follow-up: Όλα</option><option value="done">Follow-up: Έγινε</option><option value="pending">Follow-up: Δεν έγινε</option></select><button class="btn" id="refreshLeadsBtn">↻ Ανανέωση</button></div><div class="tablewrap"><table><thead><tr><th>Lead</th><th>Company</th><th>Email</th><th>Τηλέφωνο</th><th>Status</th><th>Πηγή</th><th></th></tr></thead><tbody id="leadRows"></tbody></table></div></div></section>
@@ -126,6 +126,34 @@ async function updateRemote(idValue,payload){
   const clean={...payload};delete clean.id;delete clean.created_at;
   return apiRequest(`${CRM_API}/${encodeURIComponent(idValue)}`,{method:'PUT',body:JSON.stringify(clean)});
 }
+async function savePageState(){
+  const checks=[...document.querySelectorAll('#leadRows .follow-check')];
+  if(!checks.length)return alert('Δεν υπάρχουν leads στη σελίδα για αποθήκευση.');
+  if(!getCrmKey())return alert('Πρώτα σύνδεσε το CRM με το API.');
+  const button=document.getElementById('savePageBtn');
+  const original=button.textContent;
+  button.disabled=true;
+  button.textContent='⏳ Αποθήκευση...';
+  try{
+    for(const check of checks){
+      const row=check.closest('tr');
+      const toggleBtn=row?.querySelector('.follow-toggle');
+      const m=(toggleBtn?.getAttribute('onclick')||'').match(/toggleRemoteFollowup\\('([^']+)'/);
+      if(!m)continue;
+      const lead=remoteLeads.find(x=>String(x.id)===String(m[1]));
+      if(!lead)continue;
+      await updateRemote(lead.id,{...lead,followup_done:check.checked});
+    }
+    await loadRemoteLeads(true);
+    button.textContent='✓ Αποθηκεύτηκε';
+    setTimeout(()=>{button.textContent=original;button.disabled=false},1200);
+  }catch(error){
+    button.textContent=original;
+    button.disabled=false;
+    alert(error.message||'Δεν ήταν δυνατή η αποθήκευση της σελίδας.');
+  }
+}
+
 
 function show(v){document.querySelectorAll('.view').forEach(x=>x.classList.remove('active'));document.getElementById(v).classList.add('active');document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.view===v));document.getElementById('title').textContent={dashboard:'ELåiVA CRM',customers:'Πελάτες',leads:'Leads',followups:'Επανακλήσεις',appointments:'Ραντεβού',invoices:'Τιμολόγια',support:'Support'}[v]||'ELåiVA CRM';render();if(v==='leads')loadRemoteLeads(true)}
 document.querySelectorAll('.nav button').forEach(b=>b.onclick=()=>show(b.dataset.view));
@@ -187,6 +215,7 @@ customerForm.onsubmit=async e=>{
   }catch(error){alert(error.message||'Δεν ήταν δυνατή η αποθήκευση.')}
 };
 
+savePageBtn.onclick=()=>savePageState();
 addBtn.onclick=()=>openCustomer();
 exportBtn.onclick=()=>{const blob=new Blob([JSON.stringify(remoteLeads,null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='elaiva-crm-backup.json';a.click();URL.revokeObjectURL(a.href)};
 crmConnectBtn.onclick=async()=>{connectCrm();setTimeout(async()=>{await migrateLocalCustomers();await loadRemoteLeads(true)},300)};
